@@ -63,4 +63,9 @@ declare module B4W{
     */
     report_app_error(text_message:string, link_message:string, link:string, purge_elements:Array<any>):void;
   }
+
+  export interface Animation{ 
+    AB_CYCLIC:string;//Animation behavior: cyclic.
+    AB_FINISH_RESET:string//Animation behavior: go back to the zero frame after finishing.
+  }
 }
