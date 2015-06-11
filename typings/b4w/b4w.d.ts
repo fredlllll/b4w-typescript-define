@@ -546,4 +546,56 @@ declare module b4w{
     set(prop:string, value:any);
   }
 
+  export class constraints{
+    //Attach the object to the other object using a copy translation constraint.
+    //The child object will move together with its parent, but will not rotate.
+    //Note that the offset is specified in the world space. Example: a light source attached to the character.
+    append_copy_trans(obj, target, offset:Float32Array);
+    //Attach the object to the other object using a follow constraint.
+    //The child object will track and follow its parent position.
+    //Example: a follow-style camera view for the character.
+    append_follow(obj, target:Float32Array, dist_min:number, dist_max:number);
+    //Attach the EYE camera to the object using a semi-soft constraint.
+    //The camera will smoothly follow the object's rear.
+    //Example: third-person character or vehicle views.
+    append_semi_soft_cam(obj, target, offset:Float32Array, softness?:number);
+    //Attach the object to the other object using a semi-stiff constraint.
+    //The child object will move and rotate together with its parent,
+    //but it will be still possible to rotate it independently in the parent's local space. Example: a tank turret.
+    append_semi_stiff(obj, target, offset:Float32Array, rotation_offset?:Float32Array);
+    //Attach the EYE camera to the object using a semi-stiff constraint.
+    // Also apply rotation limits to the camera.
+    // The camera will move and rotate together with its parent,
+    // but it will be still possible to rotate it independently in the parent's local space.
+    // The camera's UP vector will be preserved. Example: first-person vehicle view.
+    append_semi_stiff_cam(obj, target, offset:Float32Array, rotation_offset:Float32Array, clamp_left:number, clamp_right:number, clamp_up:number, clamp_down:number);
+    //Attach the object to the other object or to the armature bone using a stiff constraint.
+    //The child object will move, rotate and scale together with its parent.
+    //Examples: a sword is parented to the character's hand; the character is sitting in a vehicle.
+    append_stiff(obj, target, offset:Float32Array, rotation_offset?:Float32Array, scale_offset?:number);
+
+    // follow the character but will not be rotated with the camera.
+    // It will be still possible to rotate it independently from the parent.
+    append_stiff_trans(obj, target, offset:Float32Array);
+
+    //保持缩放的独立
+    append_stiff_trans_rot(obj, target, offset:Float32Array, rotation_offset?:Float32Array);
+
+    //Append a stiff viewport constraint.
+    append_stiff_viewport(obj, camobj, x_rel, y_rel, dist);
+
+    //Make the object "looking" at the target object or the position.
+    append_track(obj, target:any);
+    //Get object's parent object.
+    get_parent(obj);
+    //Remove the object's constraint (if any).
+    remove(obj);
+  }
+
+
+  export class container{
+    get_canvas():Element;
+    get_container():Element;
+    insert_to_container(obj:Element, behavior:string);
+  }
 }
