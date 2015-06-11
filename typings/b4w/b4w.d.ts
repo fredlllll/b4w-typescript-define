@@ -945,4 +945,198 @@ declare module b4w{
     //Set the rendering callback which is executed for every frame
     set_render_callback(callback:Function);
   }
+
+  export class material{
+    check_specular_hardness(obj, mat_name:string):boolean;
+    check_specular_intensity(obj, mat_name:string):boolean;
+    get_alpha_factor(obj, mat_name:string):number;
+    get_ambient_factor(obj, mat_name:string):number;
+    get_diffuse_color(obj, mat_name:string):Float32Array;
+    get_diffuse_color_factor(obj, mat_name:string):Float32Array;
+    get_diffuse_intensity(obj, mat_name:string):number;
+    get_emit_factor(obj, mat_name:string):number;
+
+    get_material_extended_params(obj, mat_name:string):any;
+    get_materials_names(obj):Array<string>;
+
+    get_specular_color(obj, mat_name:string):Float32Array;
+    get_specular_hardness(obj, mat_name:string):number;
+    get_specular_intensity(obj, mat_name:string):number;
+    get_water_material_params(obj, water_mat_name:string):any;
+    inherit_material(obj_from, mat_from_name:string, obj_to, mat_to_name:string);
+    set_alpha_factor(obj, mat_name:string, alpha_factor:number);
+    set_ambient_factor(obj, mat_name:string, ambient_factor:number);
+    set_diffuse_color(obj, mat_name:string, color:Float32Array);
+    set_diffuse_color_factor(obj, mat_name:string, diffuse_color_factor:Float32Array);
+    set_diffuse_intensity(obj, mat_name:string, intensity:Float32Array);
+    set_emit_factor(obj, mat_name:string, emit_factor:Float32Array);
+    set_material_params(obj, mat_name:string, mat_params:any);
+    set_specular_color(obj, mat_name:string, color:Float32Array);
+    set_specular_hardness(obj, mat_name:string, hardness:number);
+    set_specular_intensity(obj, mat_name:string, intensity:number);
+    set_water_material_params(obj, water_mat_name:string, water_mat_params:any);
+  }
+
+  export class mixer{
+    enable_mixer_controls();
+  }
+
+  export class mouse{
+    check_pointerlock(elem:Element):boolean;
+    disable_mouse_hover_glow();
+    disable_mouse_hover_outline();
+    enable_mouse_hover_glow();
+    enable_mouse_hover_outline();
+    exit_mouse_drag(elem:Element);
+    exit_pointerlock();
+    get_coords_x(event:MouseEvent);
+    get_coords_y(event:MouseEvent);
+    request_mouse_drag(elem:Element, use_mouse_control_cb?:Function);
+    request_pointerlock(elem:Element, enabled_cb?:Function, disabled_cb?:Function, mouse_move_cb?:Function, use_mouse_control_cb?:Function);
+  }
+
+  export class nla{
+    check_nla()
+    check_nla()
+    get_frame_end()
+    get_frame_end()
+    get_nla_frame():number;
+    play_nla()
+    play_nla()
+    set_nla_frame(frame)
+    stop_nla()
+  }
+
+
+
+  export class Graph{
+    path:Array<Array<number>>;//	A list of [x,y,z] points NPC will be moving around.
+    delay:number;//	Time delay before each path step.
+    actions:any;//	Actions for every movement type (move, idle, etc).
+    obj:any;//	Animated object ID.
+    rig:any;//	Armature object ID.
+    collider:any;//	Object	Collider object ID which will be used for collision detection.
+    empty:any;	//The corresponding empty object.
+    speed:number;//	Movement speed.
+    rot_speed:number;//	Rotation speed.
+    random:boolean;//	Boolean	Determines whether the object will perform random moves or not.
+    type:boolean;//	Number	NPC movement type (NT_WALKING, NT_FLYING, etc).
+  }
+
+  export class npc_ai{
+    NT_FLYING;
+    NT_SWIMMING;
+    NT_WALKING;
+    disable_animation();
+    enable_animation();
+    npc_ai(graph:Graph);
+  }
+
+  export class particles{
+    set_factor(obj, psys_name, factor);
+    set_normal_factor(obj, psys_name, nfactor);
+    set_size(obj, psys_name, size);
+  }
+
+  export class physics{
+    CM_CLIMB;
+    CM_FLY;
+    CM_RUN;
+    CM_WALK;
+    //Append a new async collision test to the given object.
+    append_collision_test(obj, collision_id:string, callback:Function, need_collision_point?:boolean);
+    //Append new async ray test to given object.
+    append_ray_test(obj, collision_id:string, from:Float32Array, to:Float32Array, local_coords:boolean, callback:Function);
+    //Apply a new async collision impulse test to the given object.
+    apply_collision_impulse_test(obj, callback:Function);
+    //Apply physics constraint.
+    apply_constraint(
+       pivot_type:string,//Pivot type
+       obj_a,
+       trans_a:Float32Array,//Translation of pivot frame relative to A
+       quat_a:Float32Array,//Rotation of pivot frame relative to A
+       obj_b,
+       trans_b:Float32Array,//Translation of pivot frame relative to B
+       quat_b:Float32Array,//Rotation of pivot frame relative to B
+       limits,
+       stiffness?:Float32Array,//6-dimensional vector with constraint stiffness
+       damping?:Float32Array//6-dimensional vector with constraint damping
+    )
+    apply_force(obj, fx_local:number, fy_local:number, fz_local:number);//力
+    apply_torque(obj, tx_local:number, ty_local:number, tz_local:number);//转矩
+    apply_velocity(obj, vx_local:number, vy_local:number, vz_local:number);//速度,local space
+    apply_velocity_world(obj, vx:number, vy:number, vz:number);//速度, world space
+    character_jump(obj);//Make the character jump
+    character_rotation_inc(obj, h_angle:number, v_angle:number);//Increment the character rotation
+    clear_collision_impulse_test(obj);
+    disable_simulation(obj);
+    enable_simulation(obj);
+    get_vehicle_brake(obj):number;
+    get_vehicle_name(obj);
+    get_vehicle_speed(obj):number;
+    get_vehicle_steering(obj):number;
+    get_vehicle_throttle(obj);
+    has_dynamic_physics(obj):boolean;
+    has_physics(obj):boolean;
+    has_simulated_physics(obj):boolean;
+    is_character(obj):boolean;
+    is_vehicle_chassis(obj);
+    is_vehicle_hull(obj);
+
+    //Pull object A to constraint pivot with object B.
+    pull_to_constraint_pivot(obj_a, trans_a:Float32Array, quat_a:Float32Array,
+      obj_b, trans_b:Float32Array, quat_b:Float32Array);
+    remove_collision_test(obj, collision_id)
+    remove_constraint(obj_a)
+    remove_ray_test(obj, collision_id, from, to, local_coords)
+    reset_damping(obj);
+    set_character_fly_velocity(obj, velocit:number);
+    set_character_move_dir(obj, forw:number, side:number);
+    set_character_move_type(obj, type:number);// (0 - walk, 1 - run, 2 - vertical climb)
+    set_character_rotation(obj, angle_h:number, angle_v:number);
+    set_character_rotation_h(obj, angle:number);
+    set_character_rotation_quat(obj, quat:Float32Array);
+    set_character_rotation_v(obj, angle:number);
+    set_character_run_velocity(obj, velocity:number);
+    set_character_walk_velocity(obj, velocity:number);
+    set_damping(obj, damping:number, rotation_damping:number);
+    set_gravity(obj, gravity:number);
+    set_transform(obj, trans:Float32Array, quat:Float32Array);
+    sync_transform(obj)
+    vehicle_brake(obj, brake_force:number);
+    vehicle_brake_inc(obj, brake_force:number);
+    vehicle_steer(obj, steering_value:number);
+    vehicle_steer_inc(obj, steering_value:number, dir:number);
+    vehicle_throttle(obj, engine_force:number);
+    vehicle_throttle_inc(obj, engine_force:number, dir:number);
+  }
+
+  export class preloader{
+    create_advanced_preloader(options:{
+      canvas_container_id:string;//	Canvas container ID.
+      background_container_id:string;//	Background container ID.
+      preloader_bar_id:string;//	Preloader bar ID.
+      fill_band_id:string;//	Preloader band ID.
+      preloader_caption_id:string;//	Preloader caption ID.
+      preloader_container_id:string;//Preloader container ID.
+      img_width:number;//		Device image width.
+      preloader_width:number;//	Preloader width.
+    });
+    create_rotation_preloader(options:{
+      canvas_container_id:string;//			Canvas container ID.
+      background_container_id?:string;//Background container ID.
+      bg_color?:string;//Background color.
+      frame_bg_color?:string;//Frame background color.
+      frame_class?:string;//CSS frame class.
+      anim_elem_class?:string;//Animated element class.
+    });
+    create_simple_preloader(options:{
+      canvas_container_id:string;//	String		Canvas container ID.
+      background_container_id:string;//Background container ID.
+      bg_color?:string;//Background color.
+      bar_color?:string;//Load bar color.
+    })
+    update_preloader(percentage:number);
+  }
+
 }
