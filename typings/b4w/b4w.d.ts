@@ -224,6 +224,9 @@ declare module b4w{
     category:string;
   }
 
+  export class Vec2{
+
+  }
 
   export class Vec3{
     add(a:Vec3,b:Vec3,out:Vec3):Vec3;
@@ -325,7 +328,93 @@ declare module b4w{
 
   }
 
+  export class Quat4{
+
+  }
+
+  export class Mat2{
+
+  }
+
+  export class Mat3{
+    //Calculates the adjugate of a mat3,伴随矩阵
+    adjoint(a:Mat3, out:Mat3):Mat3;
+    clone(a:Mat3):Mat3;
+    copy(a:Mat3, out:Mat3):Mat3;
+    create():Mat3;
+    //Calculates the determinant of a mat3,行列式
+    determinant(a:Mat3):number;
+    //Returns Frobenius norm of a mat3，矩阵范数
+    frob(a):number;
+    //Copies the values from a mat2d into a mat3
+    fromMat2d(a:Mat2, out):Mat3;
+    //Copies the upper-left 3x3 values into the given mat3.
+    fromMat4(a:Mat4, out:Mat3):Mat3;
+    //Calculates a 3x3 matrix from the given quaternion
+    fromQuat(q:Quat, out:Mat3):Mat3;
+    //Creates a matrix from a given angle This is equivalent to (but much faster than):
+    // mat3.identity(dest); mat3.rotate(dest, dest, rad);
+    fromRotation(rad:number, out:Mat3):Mat3;
+    //Creates a matrix from a vector scaling
+    //This is equivalent to (but much faster than): mat3.identity(dest); mat3.scale(dest, dest, vec);
+    fromScaling(v:Vec2, out:Mat3):Mat3;
+    //Creates a matrix from a vector translation
+    //This is equivalent to (but much faster than): mat3.identity(dest); mat3.translate(dest, dest, vec);
+    fromTranslation(v:Vec2, out:Mat3):Mat3;
+    //Set a mat3 to the identity matrix
+    identity(out:Mat3):Mat3;
+    invert(a:Mat3, out:Mat3):Mat3;
+    mul();//Alias for mat3.multiply
+    multiply(a:Mat3, b:Mat3, out:Mat3):Mat3;
+    normalFromMat4(a:Mat4, out:Mat3):Mat3;
+    rotate(a:Mat3, rad:number, out:Mat3):Mat3;
+    scale(a:Mat3, v:Vec2, out:Mat3):Mat3;
+    str(mat):string;
+    translate(a:Mat3, v:Vec2, out:Mat3):Mat3;
+    transpose(a:Mat3, out:Mat3):Mat3;
+  }
+
   export class Mat4{
+    adjoint(a:Mat4, out:Mat4):Mat4;
+    clone(a:Mat4):Mat4;
+    copy(a:Mat4, out:Mat4):Mat4;
+    create():Mat4;
+    determinant(a:Mat4):number;
+    frob(a:Mat4):number;
+    fromRotation(rad:number, axis:Vec3, out:Mat4):Mat4;
+    fromRotationTranslation(q:Quat4, v:Vec3, out:Mat4):Mat4;
+    fromScaling(v:Vec3, out:Mat4):Mat4;
+    fromTranslation(v:Vec3, out:Mat4):Mat4;
+    fromXRotation(rad:number, out:Mat4):Mat4;
+    fromYRotation(rad:number, out:Mat4):Mat4;
+    fromZRotation(rad:number, out:Mat4):Mat4;
+    //Generates a frustum matrix with the given bounds
+    frustum(left:number, right:number, bottom:number,
+       top:number, near:number, far:number, out:number):Mat4;
+    identity(out:Mat4):Mat4;
+    invert(a:Mat4, out:Mat4):Mat4;
+    lookAt(eye:Vec3, center:Vec3, up:Vec3, out:Mat4):Mat4;
+    mul();//Alias for mat3.multiply
+    multiply(a:Mat4, b:Mat4, out:Mat4):Mat4;
+    //Generates a orthogonal projection matrix with the given bounds
+    ortho(left:number, right:number, bottom:number, top:number, near:number, far:number, out:Mat4):Mat4;
+    //Generates a perspective projection matrix with the given bounds
+    perspective(fovy:number, aspect:number, near:number, far:number, out:Mat4):Mat4;
+    //Generates a perspective projection matrix with the given field of view.
+    //This is primarily useful for generating projection matrices to be used with the still experiemental WebVR API.
+    perspectiveFromFieldOfView(fov:number, near:number, far:number, out:Mat4):Mat4;
+    //Rotates a mat4 by the given angle around the given axis
+    rotate(a:Mat4, rad:number, axis:Vec3, out:Mat4):Mat4;
+    //Rotates a matrix by the given angle around the X axis
+    rotateX(a:Mat4, rad:number, out:Mat4):Mat4;
+    //Rotates a matrix by the given angle around the Y axis
+    rotateY(a:Mat4, rad:number, out:number):Mat4;
+    rotateZ(a:Mat4, rad:number, out:Number):Mat4;
+    scale(a:Mat4, v:Vec3, out:number):Mat4;
+    str(mat:Mat4):string;
+    //Translate a mat4 by the given vector
+    translate(a:Mat4, v:Vec3, out:Mat4):Mat4;
+    transpose(a:Mat4, out:Mat4):Mat4;
 
   }
 
@@ -597,5 +686,263 @@ declare module b4w{
     get_canvas():Element;
     get_container():Element;
     insert_to_container(obj:Element, behavior:string);
+  }
+
+  export class Sensor{
+
+  }
+
+  export class controls{
+    CT_CONTINUOUS
+    CT_LEVEL
+    CT_SHOT
+    CT_TRIGGER
+    KEY_1
+    KEY_2
+    KEY_3
+    KEY_4
+    KEY_5
+    KEY_6
+    KEY_7
+    KEY_8
+    KEY_9
+    KEY_A
+    KEY_ALT
+    KEY_B
+    KEY_BACK_SLASH
+    KEY_BACKSPACE
+    KEY_C
+    KEY_CAPSLOCK
+    KEY_COMMA
+    KEY_CTRL
+    KEY_D
+    KEY_DASH
+    KEY_DEC_POINT
+    KEY_DOWN
+    KEY_E
+    KEY_ENTER
+    KEY_EQUAL_SIGN
+    KEY_ESC
+    KEY_F
+    KEY_FORWARD_SLASH
+    KEY_G
+    KEY_GRAVE_ACCENT
+    KEY_H
+    KEY_I
+    KEY_J
+    KEY_K
+    KEY_L
+    KEY_LEFT
+    KEY_LEFT_SQ_BRACKET
+    KEY_M
+    KEY_N
+    KEY_NUM0
+    KEY_NUM1
+    KEY_NUM2
+    KEY_NUM3
+    KEY_NUM4
+    KEY_NUM5
+    KEY_NUM6
+    KEY_NUM7
+    KEY_NUM8
+    KEY_NUM9
+    KEY_O
+    KEY_P
+    KEY_PAUSE
+    KEY_PERIOD
+    KEY_Q
+    KEY_R
+    KEY_RIGHT
+    KEY_RIGHT_SQ_BRACKET
+    KEY_S
+    KEY_SEMI_COLON
+    KEY_SHIFT
+    KEY_SINGLE_QUOTE
+    KEY_SPACE
+    KEY_T
+    KEY_TAB
+    KEY_U
+    KEY_UP
+    KEY_V
+    KEY_W
+    KEY_X
+    KEY_Y
+    KEY_Z
+    PL_MULTITOUCH_MOVE_PAN
+    PL_MULTITOUCH_MOVE_ZOOM
+    PL_SINGLE_TOUCH_MOVE
+
+    //Check whether the object has the manifold attached.
+    check_sensor_manifold(obj, id:string):boolean;
+    //Check whether the object has any manifolds attached.
+    check_sensor_manifolds(obj):boolean;
+    //Create a collision impulse sensor 碰撞
+    create_collision_impulse_sensor(obj):Sensor;
+    //Create a collision sensor. Detects collisions between the object and the entities
+    // (objects or physics materials) with the specified collision ID.
+    //If the collision ID is not specified, the sensor will detect collisions with any entities.
+    create_collision_sensor(obj, collision_id:string, need_collision_pt:boolean):Sensor;
+    //Create a custom sensor.
+    //A custom sensor can be controlled manually by using the get_custom_sensor() and set_custom_sensor() methods.
+    create_custom_sensor(value:number):any;
+    //Create an elapsed sensor. The sensor's value is the time elapsed from the previous frame.
+    create_elapsed_sensor():Sensor;
+    //Create a gyroscope angle sensor.
+    // The sensor's payload stores the Euler angles of orientation of a mobile device.
+    create_gyroscope_angles_sensor():Sensor;
+    //Create a gyroscope delta sensor.
+    //The sensor's payload stores the differences between Euler angles of the current orientation and the previous orientation of a mobile device.
+    create_gyroscope_angles_sensor():any;
+
+    //Convenience function: creates a manifold coupled with a single keyboard sensor.
+    // Can be used to quickly create a single-key functionality.
+    create_kb_sensor_manifold(obj, id:string, type:number, key:number, callback:Function, callback_param:any);
+    //Create a keyboard sensor.
+    create_keyboard_sensor(key:number):Sensor;
+    //Create a motion sensor. The sensor's value is 1 if the object is in motion.
+    create_motion_sensor(obj, threshold?:number, rotation_threshold?:number):Sensor;
+    create_mouse_click_sensor():Sensor;
+    //axis: Coordinate(s) to track: "X", "Y", "XY"
+    create_mouse_move_sensor(axis?:string):Sensor;
+    //Create a mouse wheel sensor. The sensor's value is 1 for a single wheel notch scrolled away from the user.
+    create_mouse_wheel_sensor():Sensor;
+    //The sensor casts a ray between the start_offset and end_offset positions.
+    create_ray_sensor(obj, start_offset:Float32Array, end_offset:Float32Array,
+      use_local_coords?:boolean, collision_id?:boolean):Sensor;
+    //Create a selection sensor for the object.
+    //The sensor's value becomes 1 when the object is selected by the user.
+    create_selection_sensor(obj, auto_release?:boolean):Sensor;
+    create_sensor_lock(sensor, lock_sensors:Array<Sensor>, lock_logic_fun:Function);
+    create_sensor_manifold(obj, id:string, type:number, sensors:Array<Sensor>, logic_fun:Function, callback:Function, callback_param:any);
+    create_timeline_sensor():Sensor;
+    create_timer_sensor(period:number, do_repeat?:boolean):Sensor;
+
+    create_touch_move_sensor(axis?:string):Sensor;
+    create_touch_zoom_sensor():Sensor;
+    create_vertical_velocity_sensor(obj, threshold:number):Sensor;
+    get_custom_sensor(sensor:Sensor):number;
+    get_sensor_payload(obj, manifold_id:string, num:number);
+    get_sensor_value(obj, manifold_id:string, num:number);
+    register_device_orientation();
+    register_keyboard_events(element:Element, prevent_default:boolean);
+    register_mouse_events(element:Element, prevent_default:boolean, allow_element_exit?:boolean);
+    register_touch_events(element:Element, prevent_default:boolean);
+    register_wheel_events(element:Element, prevent_default:boolean);
+    remove_sensor_lock(sensor:Sensor);
+    remove_sensor_manifold(obj, id:string);
+    remove_sensor_manifolds(obj);
+    //Reset controls for all the objects.
+    reset();
+    reset_timer_sensor(obj, manifold_id:string, num:number, period:number);
+    set_custom_sensor(sensor, value:number);
+    unregister_device_orientation()
+    unregister_keyboard_events(element:Element);
+    unregister_mouse_events(element:Element);
+    unregister_touch_events(element:Element);
+    unregister_wheel_events(element:Element);
+
+  }
+
+  export class data{
+    //Check if the engine primary data is loaded (detect the last loading stage).
+    is_primary_loaded():boolean;
+    //Load data from the json file exported from Blender.
+    load(path, loaded_cb?:Function, stageload_cb?:Function,
+       wait_complete_loading?:Function, load_hidden?:Function):number;
+    //Set the root which contains the resources, for debug purposes. Enables the checking of loading paths,
+    // so if the resources are not loaded from the app root, there will be a warning in m_print.
+    set_debug_resources_root(debug_resources_root);
+
+    //Unload the previously loaded data.
+    unload(data_id:number);
+  }
+
+  export class debug{
+    assert_constants();
+    check_finite();
+    controls_info();
+    fbmsg();
+    //Store the callback function result as a flashback message.
+    fbres();
+    geometry_stats();
+    make_camera_frustum_shot();
+    make_light_frustum_shot();
+    msg();
+    mute_music();
+    num_draw_calls();
+    num_render_targets();
+    num_shaders();
+    num_textures();
+    num_triangles();
+    num_vertices();
+    object_distance();
+    object_info(name);
+    object_info(name);
+    physics_id(id);
+    physics_stats();
+    plot_telemetry();
+    print_telemetry();
+    scenegraph_to_dot();
+    set_debug_params();
+    visible_objects();
+  }
+
+  export class gyroscope{
+    enable_camera_rotation();
+  }
+
+  export class hub{
+    //Draw the mixer strip. Used by mixer addon.
+    draw_mixer_strip();
+    //Plot the array.
+    plot_array(header:string, slot:number, arr:Float32Array,
+       arg_min:number, arg_max:number, val_min:number, val_max:number);
+  }
+
+  export class lights{
+    get_lamps(lamps_type?:string):Array<any>;//Lamps type ("POINT", "SPOT", "SUN", "HEMI")
+    get_light_params(lamp_obj):any;
+    get_light_type(lamp_obj):string;
+    get_sun_params():any;
+    set_date(date:Date);
+    set_day_time(time:number);
+    set_light_params(lamp_obj, light_params:any);
+    set_max_sun_angle(angle:number);
+    set_sun_params(sun_params:any);
+  }
+
+  export class main{
+
+    //Append callback to be executed every frame.
+    append_loop_cb(callback:Function);
+    //Remove the callback for the FPS counter
+    clear_fps_callback();
+    //Deprecated: Use clear_render_callback() instead
+    clear_on_before_render_callback();
+    clear_render_callback()
+    //Return the main canvas element.
+    get_canvas_elem():Element;
+    //Return the main canvas element.
+    global_timeline();
+    //Create the WebGL context and initialize the engine.
+    init(elem_canvas_webgl, elem_canvas_hud?:Element);
+    is_paused():boolean;
+    pause()
+    redraw()
+    remove_loop_cb(callback:Function);
+    //Reset the engine. Unloads the scene and releases the engine's resources.
+    reset()
+
+    resize(width:number, height:number, update_canvas_css?:boolean);
+    resume();
+
+    //Whether to perform the checks of WebGL errors during rendering or not.
+    // Note: additional checks can slow down the engine.
+    set_check_gl_errors(val:boolean);
+    set_fps_callback(fps_cb:Function);
+    //Deprecated: Use set_render_callback() instead
+    set_on_before_render_callback();
+    //Set the rendering callback which is executed for every frame
+    set_render_callback(callback:Function);
   }
 }
