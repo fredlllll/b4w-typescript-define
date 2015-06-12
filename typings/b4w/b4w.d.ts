@@ -325,7 +325,41 @@ declare module b4w{
   }
 
   export class Quat{
-
+    add(a:Quat, b:Quat, out:Quat):Quat;
+    calculateW(a:Quat, out:Quat):Quat;
+    clone(a:Quat):Quat;
+    //Calculates the conjugate of a quat If the quaternion is normalized,
+    //this function is faster than quat.inverse and produces the same result.
+    conjugate(a:Quat, out:Quat):Quat;
+    copy(a:Quat, out:Quat):Quat;
+    create() :Quat;
+    dot(a:Quat, b:Quat):number;
+    fromMat3(m:Mat3, out:Quat):Quat;
+    fromValues(x:number, y:number, z:number, w:number):Quat;
+    identity(out:Quat):Quat;
+    invert(a:Quat, out:Quat):Quat;
+    len(a:Quat):number;
+    length(a:Quat):number;
+    //Performs a linear interpolation between two quat's
+    lerp(a:Quat, b:Quat, t:number, out:Quat) :Quat;
+    mul(a:Quat, b:Quat, out:Quat):Quat;
+    multiply(a:Quat, b:Quat, out:Quat):Quat;
+    normalize(a:Quat, out:Quat) :Quat;
+    rotateX(a:Quat, rad:number, out:Quat):Quat;
+    rotateY(a:Quat, rad:number, out:Quat):Quat;
+    rotateZ(a:Quat, rad:number, out:Quat):Quat;
+    rotationTo(a:Vec3, b:Vec3, out:Quat):Quat;
+    scale(a:Quat, b:number, out:Quat):Quat;
+    set(x:number, y:number, z:number, w:number, out:Quat):Quat;
+    //Sets the specified quaternion with values corresponding to the given axes.
+    //Each axis is a vec3 and is expected to be unit length and perpendicular to all other specified axes.
+    setAxes(view:Vec3, right:Vec3, up:Vec3) :Quat;
+    setAxisAngle(axis:Vec3, rad:number, out:Vec3) :Quat;
+    //Performs a spherical linear interpolation between two quat
+    slerp(a:Quat, b:Quat, t:number, out:Quat) :Quat;
+    sqrLen(a:Quat) :number;
+    squaredLength(a:Quat) :number;
+    str(vec:Quat):string;
   }
 
   export class Quat4{
@@ -1137,6 +1171,266 @@ declare module b4w{
       bar_color?:string;//Load bar color.
     })
     update_preloader(percentage:number);
+  }
+
+  export class SceneMetaTags{
+    title:string;
+    description:string;
+  }
+
+  export class scene{
+    append_object(obj)
+    apply_glow_anim(obj, tau:number, T:number, N:number);
+    //Apply glowing animation to the object and use the object's default settings
+    apply_glow_anim_def(obj);
+    apply_outline_anim(obj, tau:number, T:number, N:number);
+    apply_outline_anim_def(obj);
+
+    check_object(obj);
+    //Check if duplicated object is present on scene by empty name and dupli name.
+    check_object_by_dupli_name(empty_name:string, dupli_name:string, data_id?:number):boolean;
+    //Check if duplicated object is present on scene by empty name and dupli name list.
+    check_object_by_dupli_name_list(name_list:Array<string>, data_id?:number):boolean;
+    clear_glow_anim(obj);
+    clear_outline_anim(obj);
+    //Get the current active scene
+    get_active():string;
+    //Return the active camera object from the active scene
+    get_active_camera():Camera;
+    get_all_objects(type?:string, data_id?:number):Array<any>;
+    //Get bloom parameters;
+    get_bloom_params():any;
+    //Return the camera water depth or null if there is no water.
+    get_cam_water_depth():number;
+    //Get color correction params
+    get_color_correction_params():any;
+    //Get depth-of-field (DOF) params.
+    get_dof_params():any;
+    //Get horizon and zenith colors of the environment.
+    get_environment_colors() :Array<any>;
+    //Find the first character on the active scene.
+    get_first_character():Object;
+    //Get fog color and density.
+    get_fog_color_density(dest:Float32Array):Float32Array;
+    get_glow_color(dest:Float32Array):Float32Array;
+    //Get outline glow intensity for the object.
+    get_glow_intensity(obj):number;
+    //Get glow material parameters
+    get_glow_material_params():any;
+    get_god_rays_params():any;
+    get_meta_tags():SceneMetaTags;
+    get_object_by_dupli_name(empty_name:string, dupli_name:string, data_id?:number):any;
+    get_object_by_dupli_name_list(name_list:Array<string>, data_id?:number):any;
+    get_object_by_name(name:string, data_id?:number);
+    check_object_by_name(name:string, data_id?:number):boolean;
+    get_object_children(obj):Array<any>;
+    get_object_data_id(obj):number;
+    //Return the object's parent.
+    get_object_dg_parent(obj):any;
+    get_object_name(obj):string;
+    get_object_type(obj):string;
+    get_outline_color(dest:Float32Array):Float32Array;
+    get_outline_intensity(obj):number;
+    get_scenes():Array<any>;
+    get_shadow_params():any;
+    get_shore_dist(trans:Float32Array, v_dist_mult?:number):number;
+    get_sky_params():any;
+    get_ssao_params():any;
+    //Return type of mesh object or null.
+    get_type_mesh_object(obj):string;
+    get_water_mat_params(water:any);
+    get_water_surface_level():number;
+    get_wind_params():any;
+    hide_object(obj);
+    is_hidden(obj):boolean;
+    is_visible(obj):boolean;
+    outlining_is_enabled(obj, value:boolean);
+    pick_object(x:number, y:number);
+    remove_object(obj);
+    set_active(scene_name);
+    set_bloom_params(bloom:any);//全屏泛光
+    set_color_correction_params(Color:any);
+    set_dof_params(DOF:any);
+    set_environment_colors(opt_environment_energy?:number, opt_horizon_color?:Float32Array, opt_zenith_color?:Float32Array);
+    set_fog_color_density(val:Float32Array);
+    set_glow_color(color:Float32Array);
+    set_glow_intensity(obj, value:number);
+    set_glow_material_params(glow);
+    set_god_rays_params(god);
+    set_outline_color(color:Float32Array);
+    set_outline_intensity(obj, value:number);
+    set_shadow_params(shadow_params);
+    set_sky_params(sky_params)
+    set_ssao_params(ssao_params)
+    set_water_params(water)
+    set_wind_params(wind)
+    show_object(obj)
+    update_scene_materials_params()
+  }
+
+  export class  screenshooter{
+    //Take a screenshot and download as screenshot.png image.
+    shot();
+  }
+
+  export class sfx{
+    apply_playlist(objs, delay:number, random:boolean);
+    check_active_speakers():boolean;
+    clear_playlist():boolean;
+    cyclic(obj, cyclic:boolean);
+    detect_audio_container(hint?:string):string;
+    detect_video_container(hint?:string):string;
+    duck(obj, value:number, time:number);
+    //Get compressor params.
+    get_compressor_params():any;
+    //Get filter frequency response.
+    get_filter_freq_response(obj, freq_arr:Float32Array, mag_arr:Float32Array, phase_arr:Float32Array);
+    get_filter_params(obj):any;
+    get_positional_params(obj):any;
+    get_speaker_objects() :Array<any>;
+    get_speakers();//Deprecated
+    get_volume(obj):number;
+    get_volume(obj):number;
+    is_cyclic(obj):boolean;
+    is_muted(obj) :boolean;
+    is_play(obj);
+    listener_reset_speed(speed:number, dir?:Float32Array);
+    mute(obj, muted:boolean);
+    pause(obj);
+    play(obj, when?:number, duration?:number);
+    play_def(obj);
+    playrate(obj, playrate);
+    playrate(obj):number;
+    resume(obj);
+    set_compressor_params(params)
+    set_filter_params(obj, params)
+    set_positional_params(obj, params)
+    set_volume(obj, volume:number);
+    speaker_play(obj, cyclic:boolean, duration?:number, playrate?:number);
+    speaker_playback_rate();
+    speaker_reset_speed(obj, speed:number, dir:Float32Array);
+    speaker_stop(obj);
+    stop(obj);
+    unduck(objnullable);
+  }
+
+  export class shaders{
+    get_compiled();
+    report_repeatful_compilation();
+  }
+
+  export class storage{
+    cleanup();
+    get(key:string);
+    init(prefix:string);
+    set(key:string,value:string);
+  }
+
+  export class textures{
+    get_canvas_texture_context(id:string,data_id?:number);
+    pause_videl(texture_name:string,data_id?:number);
+    play_video(texture_name:string, data_id?:number);
+    reset_video(texture_name:string, data_id?:number);
+    update_canvas_texture_context(id:string);
+    update_canvas_texture_context(data_id:number, id:string);
+  }
+
+  export class time{
+    animate(from:number, to:number, timeout:number, anim_cb:Function);
+    clear_timeout(id:number);
+    get_timeline():number;
+    set_timeout(callback:Function, time:number):number;
+  }
+
+  export class transform{
+    SPACE_LOCAL
+    SPACE_WORLD
+    distance(obj1, obj2):number;
+    //Reset EMPTY's transform to allow child objects behave in the absolute (world) space.
+    // Works only for EMPTYes with "relative group coords" option enabled.
+    empty_reset_transform(obj);
+    get_object_bounding_box(obj);
+    //Get the object center in the world space.
+    //Works for dynamic and static objects.
+    get_object_center(obj, calc_bs_center:boolean, dest?:Float32Array):Float32Array;
+    get_object_size(obj):number;
+    //Get object rotation quaternion.
+    get_rotation(obj, opt_dest?:Float32Array):Float32Array;
+    get_rotation_quat();
+    get_scale(obj):number;
+    get_translation(obj, dest?:Float32Array):Float32Array;
+    get_tsr(obj, dest?:Float32Array):Float32Array;
+    move_local(obj, x:number, y:number, z:number);
+    set_rotation(obj, x:number, y:number, z:number, w:number);
+    set_rotation_euler(obj, x:number, y:number, z:number);
+    set_rotation_euler_v(obj, euler:Float32Array);
+    set_rotation_quat();//Deprecated
+    set_rotation_quat_v();//Deprecated
+    set_rotation_v(obj, quat:Float32Array);
+    set_scale(obj, scale:number);
+    set_translation(obj, x:number, y:number, z:number);
+    set_translation_rel(obj, x:number, y:number, z:number, obj_parent)
+    set_translation_v(obj, trans:Float32Array);
+    set_tsr(obj, tsr:Float32Array);
+  }
+
+
+  export class tsr8{
+    copy(tsr:tsr8, tsr2:tsr8)
+    create():tsr8;
+    //Create a new TSR from separate trans, scale and quat.
+    create_sep(trans:Vec3, scale:number, quat, dest:tsr8):tsr8;
+    from_mat4(mat:Mat4):tsr8;
+    get_quat_view() :Quat;
+    get_scale():number;
+    get_trans_view(tsr:tsr8):Vec3;
+    identity(tsr:tsr8);
+    interpolate(tsr:tsr8, tsr2:tsr8, factor:number, dest:tsr8):tsr8;
+    invert(tsr:tsr8, dest:tsr8):tsr8;
+    multiply(tsr:tsr8, tsr2:tsr8, dest:tsr8):tsr8;
+    set_quat(quat:Quat, dest:tsr8);
+    set_scale(scale:number, dest:tsr8);
+    set_sep(trans:Vec3, scale:number, quat:Quat, dest:tsr8);
+    set_trans(trans:Vec3, dest:tsr8);
+    set_transcale(transcale:Vec4, dest:tsr8);
+    transform_dir_vec3(trans:Vec3, tsr:tsr8, dest:tsr8);
+    transform_dir_vectors(vectors:Float32Array, tsr:tsr8, new_vectors:Float32Array, dest_offset?:number):Float32Array;
+    transform_tangents(vectors, tsr, new_vectors, dest_offset?:number):Float32Array;
+    transform_vec3_inv(trans:Vec3, tsr:tsr8, dest:Vec3);
+    transform_vectors(vectors:Float32Array, tsr:tsr8, new_vectors:Float32Array, dest_offset?:number) :Float32Array;
+    translate(tsr:tsr8, trans:Vec3, dest:tsr8):tsr8;
+  }
+
+  export class util{
+    AXIS_MX
+    AXIS_MY
+    AXIS_MZ
+    AXIS_X
+    AXIS_Y
+    AXIS_Z
+    angle_wrap_0_2pi(angle:number):number;
+    angle_wrap_periodic(angle:number, from:number, to:number):number;
+    cam_quat_to_mesh_quat(quat:Float32Array, dest?:Float32Array):Float32Array;
+    clamp(value:number, min:number, max:number):number;
+    correct_cam_quat_up(quat:Float32Array, up_only:boolean);
+    euler_to_quat(euler:Float32Array, quat:Float32Array);
+    ground_project_quat();
+    is_armature(obj):boolean;
+    is_mesh(obj) :boolean;
+    is_vector(o, dimension?:number):boolean;
+    keyfind()
+    keysearch()
+    matrix_to_quat(matrix:Float32Array):Float32Array;
+    quat_project(quat:Float32Array,
+       quat_ident_dir:Float32Array,
+       plane:Float32Array,
+       plane_ident_dir:Float32Array,
+       dest?:Float32Array):Float32Array;
+    quat_to_dir(quat:Float32Array, ident:Float32Array, dest?:Float32Array):Float32Array;
+    quat_to_euler(quat:Float32Array, euler:Float32Array);
+    sign(value:number):number;
+    smooth(curr:number, last:number, delta:number, pariod:number):number;
+    smooth_v(curr:Float32Array, last:Float32Array, delta:Float32Array, pariod:Float32Array, dest?:Float32Array):Float32Array;
   }
 
 }
