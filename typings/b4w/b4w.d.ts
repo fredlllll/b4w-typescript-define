@@ -14,20 +14,20 @@ declare module b4w{
   export function ModuleFunction(exports:any, require:Function);
 
 //https://www.blend4web.com/api_doc/module-app.html#.init
-  export interface App{
+  export class app{
     init(options?:{
       canvas_container_id?:string;
       callback?:Function;
       error_purge_elements?:boolean;//Remove interface elements after error.
       gl_debug?:boolean;
       show_hud_debug_info?:boolean;//Show HUD with developer info.
-      show_fbs:boolean;
-      fps_elem_id:string;//Custom fps counter id.
-      fps_wrapper_id:string;//Show FPS wrapper with current id.
-      report_init_failure:boolean;//Show elements with info about init failure
-      pause_invisible:boolean;//Pause engine simulation if page is not visible (in other tab or minimized).
-      key_pause_enabled:boolean;//Enable key pause
-      autoresize:boolean;//Automatically resize canvas to match the size of container element.
+      show_fbs?:boolean;
+      fps_elem_id?:string;//Custom fps counter id.
+      fps_wrapper_id?:string;//Show FPS wrapper with current id.
+      report_init_failure?:boolean;//Show elements with info about init failure
+      pause_invisible?:boolean;//Pause engine simulation if page is not visible (in other tab or minimized).
+      key_pause_enabled?:boolean;//Enable key pause
+      autoresize?:boolean;//Automatically resize canvas to match the size of container element.
     });
 
     attr_animate(elem:Element,attr_name:string,from:number,to:number,timeout:number,opt_callback:Function);
@@ -70,7 +70,7 @@ declare module b4w{
     report_app_error(text_message:string, link_message:string, link:string, purge_elements:Array<any>):void;
   }
 
-  export interface Animation{
+  export class animation{
     AB_CYCLIC:number;//Animation behavior: cyclic.
     AB_FINISH_RESET:number;//Animation behavior: go back to the zero frame after finishing.
     AB_FINISH_STOP:number;//Animation behavior: stop the animation after finishing.
@@ -177,7 +177,7 @@ declare module b4w{
     //Play the object's animation.
     //The animation must be applied to the object before, or the object must have the default animation
     // (i.e. assigned in Blender).
-    play(obj:any,finish_callback:Function,slot_num?:number):boolean;
+    play(obj:any,finish_callback?:Function,slot_num?:number):boolean;
 
     //Remove the animation from the object.
     remove(obj:any):void;
@@ -205,17 +205,21 @@ declare module b4w{
     update_object_animation(obj:any, elapsed:number, slot_num?:number, force_update?:boolean);
   }
 
-  export class Objects{
-    copy(obj:Objects,new_name:string,deep_copy:boolean):Objects;
+  export class Object{
+
+  }
+
+  export class objects{
+    copy(obj:Object,new_name:string,deep_copy:boolean):Object;
 
     //Get the Blender-assigned meta tags from the object.
     get_meta_tags():Array<ObjectMetaTags>;
 
     //Set object's material node rgb.
-    set_nodemat_rgb(obj:Objects,name_list:Array<string>,r:number,g:number,b:number);
+    set_nodemat_rgb(obj:Object,name_list:Array<string>,r:number,g:number,b:number);
 
     //Set object's material node value.
-    set_nodemat_value(obj:Objects,name_list:Array<string>);
+    set_nodemat_value(obj:Object,name_list:Array<string>);
   }
 
   export class ObjectMetaTags{
@@ -469,19 +473,19 @@ declare module b4w{
 
   export class Geometry{
     //Check if object has got shape keys.
-    check_shape_keys(obj:Objects):boolean;
+    check_shape_keys(obj:Object):boolean;
 
     //Extract the array of triangulated face indices from the given object.
-    extract_index_array(obj:Objects,mat_name:string):any;//Uint16Array | Uint32Array
+    extract_index_array(obj:Object,mat_name:string):any;//Uint16Array | Uint32Array
 
     //Extract the vertex array from the object.
-    extract_vertex_array(obj:Objects, mat_name:string, attrib_name:string):Float32Array;
+    extract_vertex_array(obj:Object, mat_name:string, attrib_name:string):Float32Array;
 
     //Return shape key current value.
-    get_shape_key_value(obj:Objects, key_name:string):Array<number>;
+    get_shape_key_value(obj:Object, key_name:string):Array<number>;
 
     //Return all available shape keys names.
-    get_shape_keys_names(obj:Objects):Array<string>;
+    get_shape_keys_names(obj:Object):Array<string>;
 
     /*
       Override geometry for the given object.
@@ -491,10 +495,10 @@ declare module b4w{
       positions_array	Float32Array	New vertex positions array
       smooth_normals	Boolean	Enable normals smoothing
     */
-    override_geometry(obj:Objects, mat_name:string, ibo_array:any, positions_array:Float32Array, smooth_normals:boolean);
+    override_geometry(obj:Object, mat_name:string, ibo_array:any, positions_array:Float32Array, smooth_normals:boolean);
 
     //Apply shape key to the object.
-    set_shape_key_value(obj:Objects, key_name:string, value:number);
+    set_shape_key_value(obj:Object, key_name:string, value:number);
 
     /*
     Update the vertex array for the given object.
@@ -505,132 +509,136 @@ declare module b4w{
     attrib_name	           String	              Attribute name (a_position, a_normal, a_tangent)
     array	           Float32Array	T             he new array
     */
-    update_vertex_array(obj:Objects, mat_name:string, attrib_name:string, array:Float32Array);
+    update_vertex_array(obj:Object, mat_name:string, attrib_name:string, array:Float32Array);
   }
 
   export class Camera{
+
+  }
+
+  export class camera{
     MS_ANIMATION:string;//The camera's movement style: animated.
     MS_EYE_CONTROLS:string;//The camera's movement style: eye
     MS_HOVER_CONTROLS:string;//The camera's movement style: hover.
     MS_STATIC:string;//The camera's movement style: static (non-interactive).
     MS_TARGET_CONTROLS:string;//The camera's movement style: target.
     //Set the distance limits for the TARGET/HOVER camera.
-    apply_distance_limits(camobj:Objects, min:number, max:number):void;
+    apply_distance_limits(camobj:Camera, min:number, max:number):void;
     //Set the horizontal angle limits for the TARGET/EYE camera, or the horizontal (X axis) translation limits for the HOVER camera.
-    apply_horizontal_limits(camobj:Objects, left_value:number, right_value:number, space?:number);
-    apply_hover_angle_limits(camobj:Objects, down_angle:number, up_angle:number);
-    apply_vertical_limits(camobj:Objects, down_value:number, up_value:number, space?:number);
-    calc_ray(camobj:Objects, xpix:number, ypix:number, dest?:Float32Array):Float32Array;
-    clear_distance_limits(camobj:Objects);//Remove the distance clamping limits from the TARGET camera.
-    clear_horizontal_limits(camobj:Objects);//Remove the horizontal clamping limits from the TARGET/EYE/HOVER camera.
-    clear_hover_angle_limits(camobj:Objects);//Remove the hover angle limits from the HOVER camera.
-    clear_vertical_limits(camobj:Objects);//Remove the vertical clamping limits from the TARGET/EYE/HOVER camera.
+    apply_horizontal_limits(camobj:Camera, left_value:number, right_value:number, space?:number);
+    apply_hover_angle_limits(camobj:Camera, down_angle:number, up_angle:number);
+    apply_vertical_limits(camobj:Camera, down_value:number, up_value:number, space?:number);
+    calc_ray(camobj:Camera, xpix:number, ypix:number, dest?:Float32Array):Float32Array;
+    clear_distance_limits(camobj:Camera);//Remove the distance clamping limits from the TARGET camera.
+    clear_horizontal_limits(camobj:Camera);//Remove the horizontal clamping limits from the TARGET/EYE/HOVER camera.
+    clear_hover_angle_limits(camobj:Camera);//Remove the hover angle limits from the HOVER camera.
+    clear_vertical_limits(camobj:Camera);//Remove the vertical clamping limits from the TARGET/EYE/HOVER camera.
 
     //Correct the UP vector of the camera. This is sometimes required when the camera exits constrained mode.
-    correct_up(camobj:Objects, y_axis:Float32Array);
+    correct_up(camobj:Camera, y_axis:Float32Array);
     //Get the horizontal and vertical angles of the camera.
-    get_angles(camobj:Objects, dest?:Float32Array):Float32Array;
+    get_angles(camobj:Camera, dest?:Float32Array):Float32Array;
     //Get the distance limits of the TARGET/HOVER camera.
-    get_cam_dist_limits(camobj:Objects, dist?:Float32Array):Float32Array;
+    get_cam_dist_limits(camobj:Camera, dist?:Float32Array):Float32Array;
     //Get the azimuth and elevation angles (CCW as seen from the rotation axis) of the TARGET/HOVER camera,
     // or the orientation angles of the EYE camera.
-    get_camera_angles(camobj:Objects, dest?:Float32Array):Float32Array;// [phi, theta]
+    get_camera_angles(camobj:Camera, dest?:Float32Array):Float32Array;// [phi, theta]
     //Get the azimuth and elevation angles (CCW as seen from the rotation axis) of the TARGET/HOVER camera,
     //or the orientation angles of the EYE camera. The angles are converted for the character object.
-    get_camera_angles_char(camobj:Objects, dest?:Float32Array):Float32Array;
+    get_camera_angles_char(camobj:Camera, dest?:Float32Array):Float32Array;
     //Get the eye vector of the camera.
-    get_eye(camobj:Objects, dest?:Float32Array):Float32Array;
+    get_eye(camobj:Camera, dest?:Float32Array):Float32Array;
     //Get the vertical angle of the camera's field of view.
-    get_fov(camobj):number;
+    get_fov(camobj:Camera):number;
     //Set the vertical angle of the camera's field of view.
-    get_fov(camobj, fov:number);
+    get_fov(camobj:Camera, fov:number);
     //Get the horizontal angle limits of the TARGET/EYE camera (converted to the [0, 2PI] range),
     //or the horizontal translation limits of the HOVER camera.
-    get_horizontal_limits(camobj, dest?:Float32Array):Float32Array;
+    get_horizontal_limits(camobj:Camera, dest?:Float32Array):Float32Array;
     //Get the hover angle limits for the HOVER camera, converted to the [-PI, PI] range.
-    get_hover_angle_limits(camobj, angles?:number):Float32Array;
+    get_hover_angle_limits(camobj:Camera, angles?:number):Float32Array;
     //Get the angle of the HOVER camera.
-    get_hover_cam_angle(camobj):number;
+    get_hover_cam_angle(camobj:Camera):number;
     //Get the pivot translation of the HOVER camera.
-    get_hover_cam_pivot(camobj):Float32Array;
+    get_hover_cam_pivot(camobj:Camera):Float32Array;
     //Get the movement style of the camera.
-    get_move_style(camobj):number;
+    get_move_style(camobj:Camera):number;
     //Get the orthogonal scale of the camera.
-    get_ortho_scale(camobj):number;
+    get_ortho_scale(camobj:Camera):number;
     //Get the pivot point of the camera.
-    get_pivot(camobj, dest?:Float32Array):Float32Array;
+    get_pivot(camobj:Camera, dest?:Float32Array):Float32Array;
     //Get the distance from the convergence plane of the stereoscopic camera.
-    get_stereo_distance(camobj):number;
+    get_stereo_distance(camobj:Camera):number;
     //Get the velocity parameters of the camera.
-    get_velocity_params(camobj, dest?:Float32Array):Float32Array;
+    get_velocity_params(camobj:Camera, dest?:Float32Array):Float32Array;
     //Check whether the camera has its distance limited.
-    has_distance_limits(camobj):boolean;
-    has_horizontal_limits(camobj):boolean;
+    has_distance_limits(camobj:Camera):boolean;
+    has_horizontal_limits(camobj:Camera):boolean;
 
     //Set translation for the HOVER camera.
-    hover_cam_set_translation(camobj, Translation:Float32Array);
-    is_camera(obj):boolean;
+    hover_cam_set_translation(camobj:Camera, Translation:Float32Array);
+    is_camera(obj:Object):boolean;
     //Check if the object is a camera and has the MS_EYE_CONTROLS movement style.
-    is_eye_camera(obj):boolean;
+    is_eye_camera(obj:Object):boolean;
     //Check if the object is a camera and has the MS_HOVER_CONTROLS movement style.
-    is_hover_camera(obj):boolean;
+    is_hover_camera(obj:Object):boolean;
     //Check whether the camera is looking upwards.
-    is_look_up(camobj):boolean;
+    is_look_up(camobj:Camera):boolean;
     //Check whether the camera is an ORTHO camera.
-    is_ortho_camera(camobj) :boolean;
+    is_ortho_camera(camobj:Camera) :boolean;
     //Check if the object is a camera and has the MS_TARGET_CONTROLS movement style.
-    is_target_camera(obj):boolean;
+    is_target_camera(obj:Object):boolean;
     //Check whether the camera eye is located under the water surface.
-    is_underwater(camobj):boolean;
+    is_underwater(camobj:Camera):boolean;
     //Translate the pivot point of the TARGET camera. +h from left to right +v from down to up
-    move_pivot(camobj, trans_h_delta:number, trans_v_delta:number):boolean;
+    move_pivot(camobj:Camera, trans_h_delta:number, trans_v_delta:number):boolean;
     //Project the 3D point to the screen. The origin of the screen space is located in the top left corner.
     //Returned coordinates are measured in device pixels (not CSS pixels).
-    project_point(camobj, point:Float32Array, dest?:Float32Array) :Float32Array;
+    project_point(camobj:Camera, point:Float32Array, dest?:Float32Array) :Float32Array;
     //Rotate the EYE camera around its origin by the given delta angles.
-    rotate(camobj, delta_phi:number, delta_theta:number);
+    rotate(camobj:Camera, delta_phi:number, delta_theta:number);
     //Rotate the camera counterclockwise (CCW) by the given angles depending on the camera's movement style.
     //Performs the delta rotation or sets the camera's absolute rotation depending on the "*_is_abs" parameters.
-    rotate_camera(camobj, phi:number, theta:number, phi_is_abs?:boolean, theta_is_abs?:boolean);
+    rotate_camera(camobj:Camera, phi:number, theta:number, phi_is_abs?:boolean, theta_is_abs?:boolean);
     //Rotate the EYE camera counterclockwise (CCW) around its origin by the given angles.
     // Performs the delta rotation or sets the camera's absolute rotation depending on the "*_is_abs" parameters.
-    rotate_eye_camera(camobj, phi:number, theta:number, phi_is_abs?:boolean, theta_is_abs?:boolean);
+    rotate_eye_camera(camobj:Camera, phi:number, theta:number, phi_is_abs?:boolean, theta_is_abs?:boolean);
     //Rotate the HOVER camera around the hover pivot point.
-    rotate_hover_cam(camobj, angle:number);
+    rotate_hover_cam(camobj:Camera, angle:number);
     //Rotate the HOVER camera around its pivot by the given angles.
     // Performs the delta rotation or sets the camera's absolute rotation depending on the "*_is_abs" parameters.
-    rotate_hover_camera(camobj, phi:number, theta:number, phi_is_abs?:boolean, theta_is_abs?:boolean);
+    rotate_hover_camera(camobj:Camera, phi:number, theta:number, phi_is_abs?:boolean, theta_is_abs?:boolean);
     //Rotate the TARGET camera around the pivot point.
-    rotate_pivot(camobj, delta_phi:number, delta_theta:number);
+    rotate_pivot(camobj:Camera, delta_phi:number, delta_theta:number);
     //Rotate the TARGET camera counterclockwise (CCW) around its pivot by the given angles.
     // Performs the delta rotation or sets the camera's absolute rotation depending on the "*_is_abs" parameters.
-    rotate_target_camera(camobj, phi:number, theta:number, phi_is_abs?:number, theta_is_abs?:number);
+    rotate_target_camera(camobj:Camera, phi:number, theta:number, phi_is_abs?:number, theta_is_abs?:number);
     set_eye_params();//Deprecated
     //Set the angle for the HOVER camera.
-    set_hover_cam_angle(camobj, angle:number);
+    set_hover_cam_angle(camobj:Camera, angle:number);
     //Set the pivot point for the HOVER camera.
-    set_hover_pivot(camobj, coords:Float32Array);
+    set_hover_pivot(camobj:Camera, coords:Float32Array);
     //Set the camera position based on the input parameters.
     // Performs vertical alignment of the camera based on the "up" parameter. This is a low-level function.
-    set_look_at(camobj, eye:Float32Array, target:Float32Array, up:Float32Array);
+    set_look_at(camobj:Camera, eye:Float32Array, target:Float32Array, up:Float32Array);
     //Set the movement style (MS_*) for the camera.
-    set_move_style(camobj, move_style):boolean;
+    set_move_style(camobj:Camera, move_style):boolean;
     //Set the orthogonal scale of the camera.
-    set_ortho_scale(camobj, ortho_scale:number);
+    set_ortho_scale(camobj:Camera, ortho_scale:number);
     //Set the pivot point for the TARGET camera.
-    set_pivot(camobj, coords:Float32Array);
+    set_pivot(camobj:Camera, coords:Float32Array);
     //Set the distance to the convergence plane of the stereoscopic camera.
-    set_stereo_distance(camobj, conv_dist:number);
+    set_stereo_distance(camobj:Camera, conv_dist:number);
     //Set the translation and the pivot point for the TARGET camera.
-    set_trans_pivot(camobj, trans:Float32Array, pivot:Float32Array);
+    set_trans_pivot(camobj:Camera, trans:Float32Array, pivot:Float32Array);
     //Set the velocity parameters for the camera.
-    set_velocity_params(camobj, velocity:Float32Array);
+    set_velocity_params(camobj:Camera, velocity:Float32Array);
     //Translate the HOVER camera.
-    translate_hover_cam_v(camobj, Translation:Float32Array);
+    translate_hover_cam_v(camobj:Camera, Translation:Float32Array);
     //Translate the view plane.
-    translate_view(camobj, x:number, y:number, angle:number);
+    translate_view(camobj:Camera, x:number, y:number, angle:number);
     //Zoom the camera to the object.
-    zoom_object(camobj, obj);
+    zoom_object(camobj:Camera, obj);
 
   }
 
@@ -1178,7 +1186,7 @@ declare module b4w{
     description:string;
   }
 
-  export class scene{
+  export class scenes{
     append_object(obj)
     apply_glow_anim(obj, tau:number, T:number, N:number);
     //Apply glowing animation to the object and use the object's default settings
