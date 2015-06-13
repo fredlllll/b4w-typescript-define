@@ -1,7 +1,5 @@
-/// <reference path="./typings/requirejs/require.d.ts"/>
-/// <reference path="./typings/b4w/b4w.d.ts"/>
-
-"use strict";
+/// <reference path="../../typings/requirejs/require.d.ts"/>
+/// <reference path="../../typings/b4w/b4w.d.ts"/>
 
 b4w.register("example_main", function(exports, require) {
 
@@ -23,7 +21,7 @@ b4w.register("example_main", function(exports, require) {
       });
   }
 
-  function init_cb(canvas_elem, success) {
+  function init_cb(canvas_elem:Element, success:boolean) {
 
       if (!success) {
           console.log("b4w init failure");
@@ -41,7 +39,6 @@ b4w.register("example_main", function(exports, require) {
 
   function load_cb(data_id) {
       var all_objects = m_scenes.get_all_objects();
-      debugger;
       m_app.enable_camera_controls();
   }
 

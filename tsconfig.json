@@ -9,14 +9,15 @@
         "noLib": false,
         "preserveConstEnums": true,
         "suppressImplicitAnyIndexErrors": true,
-        "sourceMap": false
+        "sourceMap": true
     },
     "filesGlob": [
         "./**/*.ts",
         "!./node_modules/**/*.ts"
     ],
     "files": [
-        "./main.ts",
+        "./test/interactive_web/main.ts",
+        "./test/playroom/main.ts",
         "./typings/b4w/b4w.d.ts",
         "./typings/requirejs/require-tests.ts",
         "./typings/requirejs/require.d.ts"

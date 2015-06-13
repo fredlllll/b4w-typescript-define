@@ -17,7 +17,7 @@ declare module b4w{
   export class app{
     init(options?:{
       canvas_container_id?:string;
-      callback?:Function;
+      callback?:(canvas_elem:Element, success:boolean)=>void;
       error_purge_elements?:boolean;//Remove interface elements after error.
       gl_debug?:boolean;
       show_hud_debug_info?:boolean;//Show HUD with developer info.
@@ -68,6 +68,7 @@ declare module b4w{
     purge_elements	Array	Array of elements to destroy just before the error elements are inserted.
     */
     report_app_error(text_message:string, link_message:string, link:string, purge_elements:Array<any>):void;
+    resize_to_container();
   }
 
   export class animation{
