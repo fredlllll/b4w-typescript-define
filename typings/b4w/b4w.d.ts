@@ -824,7 +824,7 @@ declare module b4w{
     //Create a collision sensor. Detects collisions between the object and the entities
     // (objects or physics materials) with the specified collision ID.
     //If the collision ID is not specified, the sensor will detect collisions with any entities.
-    create_collision_sensor(obj, collision_id:string, need_collision_pt:boolean):Sensor;
+    create_collision_sensor(obj, collision_id?:string, need_collision_pt?:boolean):Sensor;
     //Create a custom sensor.
     //A custom sensor can be controlled manually by using the get_custom_sensor() and set_custom_sensor() methods.
     create_custom_sensor(value:number):any;
@@ -856,7 +856,7 @@ declare module b4w{
     //The sensor's value becomes 1 when the object is selected by the user.
     create_selection_sensor(obj, auto_release?:boolean):Sensor;
     create_sensor_lock(sensor, lock_sensors:Array<Sensor>, lock_logic_fun:Function);
-    create_sensor_manifold(obj, id:string, type:number, sensors:Array<Sensor>, logic_fun:Function, callback:Function, callback_param:any);
+    create_sensor_manifold(obj, id:string, type:number, sensors:Array<Sensor>, logic_fun:Function, callback:Function, callback_param?:any);
     create_timeline_sensor():Sensor;
     create_timer_sensor(period:number, do_repeat?:boolean):Sensor;
 

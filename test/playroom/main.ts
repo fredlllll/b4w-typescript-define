@@ -6,9 +6,9 @@
 b4w.register("cartoon_interior", function(exports, require) {
 
 var m_app:b4w.app    = require("app");
-var m_cam    = require("camera");
-var m_cons   = require("constraints");
-var m_ctl    = require("controls");
+var m_cam:b4w.camera    = require("camera");
+var m_cons:b4w.constraints   = require("constraints");
+var m_ctl:b4w.controls    = require("controls");
 var m_data   = require("data");
 var m_mouse  = require("mouse");
 var m_phy    = require("physics");
