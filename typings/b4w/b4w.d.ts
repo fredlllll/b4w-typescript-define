@@ -1440,6 +1440,9 @@ declare module b4w{
     sign(value:number):number;
     smooth(curr:number, last:number, delta:number, pariod:number):number;
     smooth_v(curr:Float32Array, last:Float32Array, delta:Float32Array, pariod:Float32Array, dest?:Float32Array):Float32Array;
+    //Calculate intersection point of a line and a plane
+    line_plane_intersect(pn:Float32Array, p_dist:number,
+       lp:Float32Array, l_dir:Float32Array, dest:Float32Array):Float32Array;
   }
 
 }

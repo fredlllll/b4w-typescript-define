@@ -13,14 +13,14 @@ var m_data:b4w.data   = require("data");
 var m_mouse:b4w.mouse  = require("mouse");
 var m_phy:b4w.physics    = require("physics");
 var m_scenes:b4w.scenes = require("scenes");
-var m_trans  = require("transform");
-var m_util   = require("util");
+var m_trans:b4w.transform  = require("transform");
+var m_util:b4w.util   = require("util");
 
 var m_quat = require("quat");
 
 var OUTLINE_COLOR_VALID:Float32Array = new Float32Array([0, 1, 0]);
 var OUTLINE_COLOR_ERROR:Float32Array = new Float32Array([1, 0, 0]);
-var FLOOR_PLANE_NORMAL = [0, 1, 0];
+var FLOOR_PLANE_NORMAL:Float32Array = new Float32Array([0, 1, 0]);
 
 var ROT_ANGLE = Math.PI/4;
 
