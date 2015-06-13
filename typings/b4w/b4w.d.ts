@@ -330,6 +330,10 @@ declare module b4w{
   }
 
   export class Quat{
+    
+  }
+
+  export class quat{
     add(a:Quat, b:Quat, out:Quat):Quat;
     calculateW(a:Quat, out:Quat):Quat;
     clone(a:Quat):Quat;
