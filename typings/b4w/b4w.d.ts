@@ -891,7 +891,7 @@ declare module b4w{
     is_primary_loaded():boolean;
     //Load data from the json file exported from Blender.
     load(path, loaded_cb?:Function, stageload_cb?:Function,
-       wait_complete_loading?:Function, load_hidden?:Function):number;
+       wait_complete_loading?:boolean, load_hidden?:boolean):number;
     //Set the root which contains the resources, for debug purposes. Enables the checking of loading paths,
     // so if the resources are not loaded from the app root, there will be a warning in m_print.
     set_debug_resources_root(debug_resources_root);
