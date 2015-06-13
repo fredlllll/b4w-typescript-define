@@ -1,8 +1,6 @@
 /// <reference path="../../typings/requirejs/require.d.ts"/>
 /// <reference path="../../typings/b4w/b4w.d.ts"/>
 
-"use strict";
-
 b4w.register("cartoon_interior", function(exports, require) {
 
 var m_app:b4w.app    = require("app");
@@ -22,22 +20,22 @@ var OUTLINE_COLOR_VALID:Float32Array = new Float32Array([0, 1, 0]);
 var OUTLINE_COLOR_ERROR:Float32Array = new Float32Array([1, 0, 0]);
 var FLOOR_PLANE_NORMAL:Float32Array = new Float32Array([0, 1, 0]);
 
-var ROT_ANGLE = Math.PI/4;
+var ROT_ANGLE:number = Math.PI/4;
 
-var WALL_X_MAX = 4;
-var WALL_X_MIN = -3.8;
-var WALL_Z_MAX = 4.2;
-var WALL_Z_MIN = -3.5;
+var WALL_X_MAX:number = 4;
+var WALL_X_MIN:number = -3.8;
+var WALL_Z_MAX:number = 4.2;
+var WALL_Z_MIN:number = -3.5;
 
-var _obj_delta_xy = new Float32Array(2);
-var spawner_pos = new Float32Array(3);
-var _vec3_tmp = new Float32Array(3);
-var _vec3_tmp2 = new Float32Array(3);
-var _vec3_tmp3 = new Float32Array(3);
-var _vec4_tmp = new Float32Array(4);
+var _obj_delta_xy:Float32Array = new Float32Array(2);
+var spawner_pos:Float32Array = new Float32Array(3);
+var _vec3_tmp:Float32Array = new Float32Array(3);
+var _vec3_tmp2:Float32Array = new Float32Array(3);
+var _vec3_tmp3:Float32Array = new Float32Array(3);
+var _vec4_tmp:Float32Array = new Float32Array(4);
 
-var _drag_mode = false;
-var _enable_camera_controls = true;
+var _drag_mode:boolean = false;
+var _enable_camera_controls:boolean = true;
 
 var _selected_obj = null;
 
@@ -93,7 +91,7 @@ function init_controls() {
     init_buttons();
 
     document.getElementById("load-1").addEventListener("click", function(e) {
-        m_data.load("resrouce/bed.json", loaded_cb, null, null, true);
+        m_data.load("resource/bed.json", loaded_cb, null, null, true);
     });
     document.getElementById("load-2").addEventListener("click", function(e) {
         m_data.load("resource/chair.json", loaded_cb, null, null, true);
@@ -317,7 +315,7 @@ function main_canvas_move(e) {
         }
 }
 
-function limit_object_position(obj) {
+function limit_object_position(obj:b4w.Object) {
     var bb = m_trans.get_object_bounding_box(obj);
 
     var obj_parent = m_cons.get_parent(obj);

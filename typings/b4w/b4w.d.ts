@@ -329,8 +329,8 @@ declare module b4w{
     transformQuat(a:Vec4, q:Quat, out:Vec4):Vec4;//Transforms the vec4 with a quat
   }
 
-  export class Quat{
-    
+  export class Quat{ //maybe just a Float32Array;
+
   }
 
   export class quat{
