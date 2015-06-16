@@ -37,7 +37,7 @@ var _vec4_tmp:Float32Array = new Float32Array(4);
 var _drag_mode:boolean = false;
 var _enable_camera_controls:boolean = true;
 
-var _selected_obj = null;
+var _selected_obj:b4w.Object = null;
 
 exports.init = function() {
     m_app.init({
@@ -76,7 +76,7 @@ function load() {
     m_data.load("resource/environment.json", load_cb);
 }
 
-function load_cb(data_id) {
+function load_cb(data_id:number) {
     m_app.enable_camera_controls();
     init_controls();
 
@@ -85,7 +85,7 @@ function load_cb(data_id) {
 }
 
 function init_controls() {
-    var controls_elem = document.getElementById("controls-container");
+    var controls_elem:HTMLElement = document.getElementById("controls-container");
     controls_elem.style.display = "block";
 
     init_buttons();
@@ -108,7 +108,7 @@ function init_controls() {
 
     document.getElementById("delete").addEventListener("click", function(e) {
         if (_selected_obj) {
-            var id = m_scenes.get_object_data_id(_selected_obj);
+            var id:number = m_scenes.get_object_data_id(_selected_obj);
             m_data.unload(id);
             _selected_obj = null;
         }
@@ -130,26 +130,26 @@ function init_buttons() {
         var id = ids[i];
 
         document.getElementById(id).addEventListener("mousedown", function(e:any) {
-            var parent = e.target.parentNode;
+            var parent:HTMLElement = e.target.parentNode;
             parent.classList.add("active");
         });
         document.getElementById(id).addEventListener("mouseup", function(e:any) {
-            var parent = e.target.parentNode;
+            var parent:HTMLElement = e.target.parentNode;
             parent.classList.remove("active");
         });
         document.getElementById(id).addEventListener("touchstart", function(e:any) {
-            var parent = e.target.parentNode;
+            var parent:HTMLElement = e.target.parentNode;
             parent.classList.add("active");
         });
         document.getElementById(id).addEventListener("touchend", function(e:any) {
-            var parent = e.target.parentNode;
+            var parent:HTMLElement = e.target.parentNode;
             parent.classList.remove("active");
         });
     }
 }
 
-function loaded_cb(data_id) {
-    var cam = m_scenes.get_active_camera();
+function loaded_cb(data_id:number) {
+    var cam:b4w.Camera = m_scenes.get_active_camera();
 
     // NOTE: need to reinitialize collision sensors because of new objects have been added
     if (m_ctl.check_sensor_manifold(cam, "COLLISION"))

@@ -16,6 +16,7 @@
         "!./node_modules/**/*.ts"
     ],
     "files": [
+        "./test/brave_game/main.ts",
         "./test/interactive_web/main.ts",
         "./test/playroom/main.ts",
         "./typings/b4w/b4w.d.ts",
