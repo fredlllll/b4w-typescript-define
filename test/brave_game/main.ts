@@ -1,42 +1,66 @@
 /// <reference path="../../typings/requirejs/require.d.ts"/>
 /// <reference path="../../typings/b4w/b4w.d.ts"/>
+"use strict"
 
+// check if module exists
 if (b4w.module_check("game_example_main"))
     throw "Failed to register module: game_example_main";
 
 b4w.register("game_example_main", function(exports, require) {
 
-var m_anim:b4w.animation  = require("animation");
 var m_app   = require("app");
 var m_main  = require("main");
 var m_data  = require("data");
 var m_ctl   = require("controls");
-var m_phy   = require("physics");
 var m_cons  = require("constraints");
 var m_scs   = require("scenes");
-var m_trans = require("transform");
 var m_cfg   = require("config");
+var m_print = require("print");
+var m_sfx   = require("sfx");
 
-var _character = null;
-var _character_rig = null;
+var m_vec3  = require("vec3");
+var m_quat  = require("quat");
 
-var ROT_SPEED = 1.5;
-var CAMERA_OFFSET = new Float32Array([0, 1.5, -4]);
+var m_conf = require("game_config");
+var m_char = require("character");
+var m_combat = require("combat");
+var m_bonuses = require("bonuses");
+var m_interface = require("interface");
+var m_golems = require("golems");
+var m_obelisks = require("obelisks");
+var m_gems = require("gems");
+var m_env = require("environment");
+
+var _char_wrapper = null;
+
+var _vec3_tmp = new Float32Array(3);
+var _vec3_tmp_2 = new Float32Array(3);
+var _vec3_tmp_3 = new Float32Array(3);
+var _vec3_tmp_4 = new Float32Array(3);
+var _quat4_tmp = new Float32Array(4);
+var _quat4_tmp2 = new Float32Array(4);
 
 exports.init = function() {
+
+    if(detect_mobile())
+        var quality = m_cfg.P_LOW;
+    else
+        var quality = m_cfg.P_HIGH;
+
     m_app.init({
         canvas_container_id: "canvas3d",
         callback: init_cb,
         physics_enabled: true,
+        quality: quality,
+        console_verbose: true,
         show_fps: true,
         alpha: false
     });
 }
 
 function init_cb(canvas_elem, success) {
-
     if (!success) {
-        console.log("b4w init failure");
+        m_print.log("b4w init failure");
         return;
     }
 
@@ -51,125 +75,105 @@ function on_resize() {
     var w = window.innerWidth;
     var h = window.innerHeight;
     m_main.resize(w, h);
-};
+}
 
 function load() {
-    m_data.load("resource/game_example.json", load_cb);
+    m_data.load("resource/level_01.json", load_cb, null, true);
 }
 
 function load_cb(data_id) {
-    _character = m_scs.get_first_character();
-    _character_rig = m_scs.get_object_by_dupli_name("character",
-                                                    "character_rig");
-    setup_movement();
-    setup_rotation();
-    setup_jumping();
 
-    m_anim.apply(_character_rig, "character_idle_01");
-    m_anim.play(_character_rig);
-    m_anim.set_behavior(_character_rig, m_anim.AB_CYCLIC);
-
-    setup_camera();
-}
-
-function setup_movement() {
-    var key_w     = m_ctl.create_keyboard_sensor(m_ctl.KEY_W);
-    var key_s     = m_ctl.create_keyboard_sensor(m_ctl.KEY_S);
-    var key_up    = m_ctl.create_keyboard_sensor(m_ctl.KEY_UP);
-    var key_down  = m_ctl.create_keyboard_sensor(m_ctl.KEY_DOWN);
-
-    var move_array = [
-        key_w, key_up,
-        key_s, key_down
-    ];
-
-    var forward_logic  = function(s){return (s[0] || s[1])};
-    var backward_logic = function(s){return (s[2] || s[3])};
-
-    function move_cb(obj, id, pulse) {
-        if (pulse == 1) {
-            switch(id) {
-            case "FORWARD":
-                var move_dir = 1;
-                m_anim.apply(_character_rig, "character_run");
-                break;
-            case "BACKWARD":
-                var move_dir = -1;
-                m_anim.apply(_character_rig, "character_run");
-                break;
-            }
-        } else {
-            var move_dir = 0;
-            m_anim.apply(_character_rig, "character_idle_01");
-        }
-
-        m_phy.set_character_move_dir(obj, move_dir, 0);
-
-        m_anim.play(_character_rig);
-        m_anim.set_behavior(_character_rig, m_anim.AB_CYCLIC);
-    };
-
-    m_ctl.create_sensor_manifold(_character, "FORWARD", m_ctl.CT_TRIGGER,
-        move_array, forward_logic, move_cb);
-    m_ctl.create_sensor_manifold(_character, "BACKWARD", m_ctl.CT_TRIGGER,
-        move_array, backward_logic, move_cb);
-}
-
-function setup_rotation() {
-    var key_a     = m_ctl.create_keyboard_sensor(m_ctl.KEY_A);
-    var key_d     = m_ctl.create_keyboard_sensor(m_ctl.KEY_D);
-    var key_left  = m_ctl.create_keyboard_sensor(m_ctl.KEY_LEFT);
-    var key_right = m_ctl.create_keyboard_sensor(m_ctl.KEY_RIGHT);
+    m_char.init_wrapper()
 
     var elapsed_sensor = m_ctl.create_elapsed_sensor();
 
-    var rotate_array = [
-        key_a, key_left,
-        key_d, key_right,
-        elapsed_sensor
-    ];
+    m_bonuses.init(elapsed_sensor);
+    m_golems.init(elapsed_sensor);
+    m_golems.init_spawn(elapsed_sensor);
+    m_obelisks.init();
+    m_gems.init();
 
-    var left_logic  = function(s){return (s[0] || s[1])};
-    var right_logic = function(s){return (s[2] || s[3])};
+    m_char.setup_controls(elapsed_sensor);
+    m_env.setup_falling_rocks(elapsed_sensor);
+    m_env.setup_lava(elapsed_sensor);
 
-    function rotate_cb(obj, id, pulse) {
+    setup_camera();
+    //setup_music();
 
-        var elapsed = m_ctl.get_sensor_value(obj, "LEFT", 4);
-
-        if (pulse == 1) {
-            switch(id) {
-            case "LEFT":
-                m_phy.character_rotation_inc(obj, elapsed * ROT_SPEED, 0);
-                break;
-            case "RIGHT":
-                m_phy.character_rotation_inc(obj, -elapsed * ROT_SPEED, 0);
-                break;
-            }
-        }
+    function replay_cb() {
+        document.getElementById("replay").style.visibility = "hidden";
+        cleanup_game(elapsed_sensor);
     }
 
-    m_ctl.create_sensor_manifold(_character, "LEFT", m_ctl.CT_CONTINUOUS,
-        rotate_array, left_logic, rotate_cb);
-    m_ctl.create_sensor_manifold(_character, "RIGHT", m_ctl.CT_CONTINUOUS,
-        rotate_array, right_logic, rotate_cb);
+    m_interface.register_replay_cb(replay_cb);
 }
 
-function setup_jumping() {
-    var key_space = m_ctl.create_keyboard_sensor(m_ctl.KEY_SPACE);
+function cleanup_game(elapsed_sensor) {
 
-    var jump_cb = function(obj, id, pulse) {
-        if (pulse == 1) {
-            m_phy.character_jump(obj);
-        }
+    m_ctl.remove_sensor_manifold(null, "PLAYLIST");
+
+    m_char.reset();
+    m_gems.reset();
+    m_bonuses.reset();
+    m_golems.reset();
+
+    m_char.setup_controls(elapsed_sensor);
+    m_obelisks.init();
+    m_env.setup_lava(elapsed_sensor);
+    m_env.setup_falling_rocks(elapsed_sensor);
+
+    m_interface.update_hp_bar();
+
+    //setup_music();
+}
+
+function detect_mobile() {
+    if( navigator.userAgent.match(/Android/i)
+     || navigator.userAgent.match(/webOS/i)
+     || navigator.userAgent.match(/iPhone/i)
+     || navigator.userAgent.match(/iPad/i)
+     || navigator.userAgent.match(/iPod/i)
+     || navigator.userAgent.match(/BlackBerry/i)
+     || navigator.userAgent.match(/Windows Phone/i)) {
+        return true;
+    } else {
+        return false;
     }
-
-    m_ctl.create_sensor_manifold(_character, "JUMP", m_ctl.CT_TRIGGER,
-        [key_space], function(s){return s[0]}, jump_cb);
 }
 
 function setup_camera() {
     var camera = m_scs.get_active_camera();
-    m_cons.append_semi_soft_cam(camera, _character, CAMERA_OFFSET);
+    var target = m_scs.get_object_by_dupli_name("character", "camera_target");
+    m_cons.append_semi_soft_cam(camera, target, m_conf.CAM_OFFSET, m_conf.CAM_SOFTNESS);
+}
+
+function setup_music() {
+    var intro_spk = m_scs.get_object_by_dupli_name("enviroment",
+                                                   m_conf.MUSIC_INTRO_SPEAKER);
+    var end_spk = m_scs.get_object_by_dupli_name("enviroment",
+                                                 m_conf.MUSIC_END_SPEAKER);
+
+    m_sfx.play_def(intro_spk);
+    m_sfx.stop(end_spk);
+
+    var intro_duration = m_sfx.get_duration(intro_spk) * m_sfx.get_playrate(intro_spk);
+
+    var playlist_cb = function(obj, id, pulse){
+        m_ctl.remove_sensor_manifold(null, "PLAYLIST");
+        if (m_char.get_wrapper().hp <= 0)
+            return;
+        var playlist_objs = [];
+        var speakers = m_conf.MUSIC_SPEAKERS;
+        for (var i = 0; i < speakers.length; i++) {
+            var spk_name = speakers[i];
+            var spk = m_scs.get_object_by_dupli_name("enviroment", spk_name);
+            playlist_objs.push(spk);
+        }
+        m_sfx.apply_playlist(playlist_objs, 0, true);
+    }
+
+    m_ctl.create_sensor_manifold(null, "PLAYLIST", m_ctl.CT_SHOT,
+        [m_ctl.create_timer_sensor(intro_duration)], null, playlist_cb);
 }
 
 });

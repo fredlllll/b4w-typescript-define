@@ -204,6 +204,9 @@ declare module b4w{
 
     //Update object animation (set the pose)
     update_object_animation(obj:any, elapsed:number, slot_num?:number, force_update?:boolean);
+
+
+    set_behavior(obj, behavior, slot_num?:number);
   }
 
   export class Object{
