@@ -16,6 +16,16 @@
         "!./node_modules/**/*.ts"
     ],
     "files": [
+        "./test/brave_game/js/bonuses.ts",
+        "./test/brave_game/js/character.ts",
+        "./test/brave_game/js/combat.ts",
+        "./test/brave_game/js/environment.ts",
+        "./test/brave_game/js/game_config.ts",
+        "./test/brave_game/js/game_example.ts",
+        "./test/brave_game/js/gems.ts",
+        "./test/brave_game/js/golems.ts",
+        "./test/brave_game/js/interface.ts",
+        "./test/brave_game/js/obelisks.ts",
         "./test/brave_game/main.ts",
         "./test/interactive_web/main.ts",
         "./test/playroom/main.ts",
