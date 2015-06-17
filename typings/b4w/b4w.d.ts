@@ -9,7 +9,7 @@ declare module b4w{
   export function module_check(module_name:string):boolean;
   export function register(module_name:string, module_body:Function):void;
   //ns: Namespace for processed modules,Default is __B4W_DEF_NS
-  export function require(module_name:string,ns?:string):Module;
+  export function require(module_name:string,ns?:string):any;
 
   export function ModuleFunction(exports:any, require:Function);
 
@@ -236,7 +236,9 @@ declare module b4w{
 
   }
 
-  export class Vec3{
+  export class Vec3{}
+
+  export class vec3{
     add(a:Vec3,b:Vec3,out:Vec3):Vec3;
     angle(a:Vec3, b:Vec3):number; //radians
     clone(a:Vec3):Vec3;
@@ -294,6 +296,10 @@ declare module b4w{
   }
 
   export class Vec4{
+
+  }
+
+  export class  vec4{
     add(a:Vec4,b:Vec4,out:Vec4):Vec4;
     clone(a:Vec4):Vec4;
     copy(a:Vec4,out:Vec4):Vec4;
@@ -857,8 +863,10 @@ declare module b4w{
     //Create a mouse wheel sensor. The sensor's value is 1 for a single wheel notch scrolled away from the user.
     create_mouse_wheel_sensor():Sensor;
     //The sensor casts a ray between the start_offset and end_offset positions.
+    create_ray_sensor(obj, start_offset:Array<number>, end_offset:Array<number>,
+      use_local_coords?:boolean, collision_id?:any):Sensor;
     create_ray_sensor(obj, start_offset:Float32Array, end_offset:Float32Array,
-      use_local_coords?:boolean, collision_id?:boolean):Sensor;
+      use_local_coords?:boolean, collision_id?:any):Sensor;
     //Create a selection sensor for the object.
     //The sensor's value becomes 1 when the object is selected by the user.
     create_selection_sensor(obj, auto_release?:boolean):Sensor;
@@ -879,7 +887,7 @@ declare module b4w{
     register_touch_events(element:Element, prevent_default:boolean);
     register_wheel_events(element:Element, prevent_default:boolean);
     remove_sensor_lock(sensor:Sensor);
-    remove_sensor_manifold(obj, id:string);
+    remove_sensor_manifold(obj, id?:string);
     remove_sensor_manifolds(obj);
     //Reset controls for all the objects.
     reset();
@@ -1236,8 +1244,10 @@ declare module b4w{
     get_god_rays_params():any;
     get_meta_tags():SceneMetaTags;
     get_object_by_dupli_name(empty_name:string, dupli_name:string, data_id?:number):any;
+    get_object_by_dupli_name(empty_name:string[], dupli_name:string[], data_id?:number):any;
     get_object_by_dupli_name_list(name_list:Array<string>, data_id?:number):any;
     get_object_by_name(name:string, data_id?:number);
+    get_object_by_name(name:string[], data_id?:number);
     check_object_by_name(name:string, data_id?:number):boolean;
     get_object_children(obj):Array<any>;
     get_object_data_id(obj):number;
@@ -1327,7 +1337,9 @@ declare module b4w{
     speaker_reset_speed(obj, speed:number, dir:Float32Array);
     speaker_stop(obj);
     stop(obj);
-    unduck(objnullable);
+    unduck(obj);
+    get_duration(obj);
+    get_playrate(obj);
   }
 
   export class shaders{
