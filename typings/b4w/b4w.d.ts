@@ -1464,4 +1464,24 @@ declare module b4w{
        lp:Float32Array, l_dir:Float32Array, dest:Float32Array):Float32Array;
   }
 
+  export class print{
+    set_verbose(v);
+    log(...args : any[]);
+    compose_args_prefix(args_in, prefix);
+    error(...args : any[]);
+    warn(...args : any[]);
+    info(...args : any[]);
+    export_error();
+    export_warn();
+    time();
+    timeEnd();
+    group();
+    groupCollapsed();
+    groupEnd();
+    clear();
+    get_warning_count();
+    get_error_count();
+    clear_errors_warnings();
+  }
+
 }

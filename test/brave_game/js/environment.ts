@@ -1,24 +1,20 @@
-"use strict"
+/// <reference path="../../../typings/requirejs/require.d.ts"/>
+/// <reference path="../../../typings/b4w/b4w.d.ts"/>
 
-if (b4w.module_check("environment"))
-    throw "Failed to register module: environment";
+var m_anim:b4w.animation  = b4w.require("animation");
+var m_ctl:b4w.controls   = b4w.require("controls");
+var m_scs:b4w.scenes   = b4w.require("scenes");
+var m_trans:b4w.transform = b4w.require("transform");
+var m_vec3:b4w.vec3  = b4w.require("vec3");
+var m_sfx:b4w.sfx   = b4w.require("sfx");
 
-b4w.register("environment", function(exports, require) {
+import m_char = require("./character");
+import m_conf = require("./game_config");
+import m_bonuses = require("./bonuses");
 
-var m_anim  = require("animation");
-var m_ctl   = require("controls");
-var m_scs   = require("scenes");
-var m_trans = require("transform");
-var m_vec3  = require("vec3");
-var m_sfx   = require("sfx");
+var _vec3_tmp = new Float32Array(3);
 
-var m_char = require("character");
-var m_conf = require("game_config");
-var m_bonuses = require("bonuses");
-
-var _vec3_tmp = new Float32Array(3); 
-
-exports.setup_falling_rocks = function(elapsed_sensor) {
+export function setup_falling_rocks(elapsed_sensor) {
 
     var falling_time = {};
 
@@ -143,7 +139,7 @@ function set_random_rock_position(rock) {
 }
 
 
-exports.setup_lava = function (elapsed_sensor) {
+export function setup_lava(elapsed_sensor) {
     var time_in_lava = 0;
 
     function lava_cb(obj, id, pulse, param) {
@@ -178,7 +174,7 @@ exports.setup_lava = function (elapsed_sensor) {
 
 }
 
-exports.disable_environment = function () {
+export function disable_environment() {
     for (var i = 0; i < m_conf.ROCK_EMPTIES.length; i++) {
         var dupli_name = m_conf.ROCK_EMPTIES[i];
         for (var j = 0; j < m_conf.ROCK_NAMES.length; j++) {
@@ -192,5 +188,3 @@ exports.disable_environment = function () {
         }
     }
 }
-
-})

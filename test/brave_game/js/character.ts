@@ -1,26 +1,22 @@
-"use strict"
+/// <reference path="../../../typings/requirejs/require.d.ts"/>
+/// <reference path="../../../typings/b4w/b4w.d.ts"/>
 
-if (b4w.module_check("character"))
-    throw "Failed to register module: character";
+var m_main:b4w.main  = b4w.require("main");
+var m_ctl:b4w.controls = b4w.require("controls");
+var m_scs:b4w.scenes = b4w.require("scenes");
+var m_phy:b4w.physics = b4w.require("physics");
+var m_anim:b4w.animation = b4w.require("animation");
+var m_sfx:b4w.sfx = b4w.require("sfx");
+var m_trans:b4w.transform = b4w.require("transform");
+var m_util:b4w.util  = b4w.require("util");
+var m_vec3:b4w.vec3  = b4w.require("vec3");
+var m_cons:b4w.constraints  = b4w.require("constraints");
 
-b4w.register("character", function(exports, require) {
-
-var m_main  = require("main");
-var m_ctl = require("controls");
-var m_scs = require("scenes");
-var m_phy = require("physics");
-var m_anim = require("animation");
-var m_sfx = require("sfx");
-var m_trans = require("transform");
-var m_util  = require("util");
-var m_vec3  = require("vec3");
-var m_cons  = require("constraints");
-
-var m_conf = require("game_config");
-var m_combat = require("combat");
-var m_interface = require("interface");
-var m_bonuses = require("bonuses");
-var m_env = require("environment");
+import m_conf = require("./game_config");
+import m_combat = require("./combat");
+import m_interface = require("./interface");
+import m_bonuses = require("./bonuses");
+import m_env = require("./environment");
 
 var _char_run_spk = null;
 var _char_attack_spk = null;
@@ -41,7 +37,7 @@ var _vec3_tmp_2 = new Float32Array(3);
 var _vec3_tmp_3 = new Float32Array(3);
 var _quat4_tmp = new Float32Array(4);
 
-exports.init_wrapper = function() {
+export function init_wrapper() {
     _char_wrapper = {
         phys_body: m_scs.get_first_character(),
         rig:    m_scs.get_object_by_dupli_name("character", "character_rig"),
@@ -56,7 +52,7 @@ exports.init_wrapper = function() {
     };
 }
 
-exports.setup_controls = function (elapsed_sensor) {
+export function setup_controls(elapsed_sensor) {
 
     precache_speakers();
     init_island_detection();
@@ -130,10 +126,10 @@ function init_island_detection() {
 }
 
 function setup_ground_sensor(ground_sens) {
-    var island_sens = m_ctl.create_ray_sensor(_char_wrapper.phys_body, [0, 0, 0],
-                                          [0, -0.25, 0], false, "ISLAND");
-    var lava_sens = m_ctl.create_ray_sensor(_char_wrapper.phys_body, [0, 0, 0],
-                                          [0, -0.25, 0], false, "LAVA");
+    var island_sens = m_ctl.create_ray_sensor(_char_wrapper.phys_body, new Float32Array([0, 0, 0]),
+                                          new Float32Array([0, -0.25, 0]), false, "ISLAND");
+    var lava_sens = m_ctl.create_ray_sensor(_char_wrapper.phys_body, new Float32Array([0, 0, 0]),
+                                          new Float32Array([0, -0.25, 0]), false, "LAVA");
     function ground_cb(obj, id, pulse) {
         var val = pulse == 1? 1: 0;
         m_ctl.set_custom_sensor(ground_sens, val)
@@ -310,7 +306,7 @@ function setup_jumping(touch_jump, on_ground_sens) {
             }
         }
     }
- 
+
     m_ctl.create_sensor_manifold(_char_wrapper.phys_body, "JUMP",
         m_ctl.CT_TRIGGER, [key_space, touch_jump, on_ground_sens],
         function(s){return s[0] || s[1]}, jump_cb);
@@ -357,7 +353,8 @@ function setup_attack(touch_attack, elapsed) {
 
     var damage_enemies_cb = function(obj, id, pulse) {
 
-        if (!_char_wrapper.state == m_conf.CH_ATTACK)
+        var someValue:number = <any>(!_char_wrapper.state);
+        if (someValue == m_conf.CH_ATTACK)
             return;
 
         if (!char_attack_done) {
@@ -387,15 +384,14 @@ function setup_attack(touch_attack, elapsed) {
         [elapsed], null, damage_enemies_cb);
 }
 
-exports.disable_controls = disable_controls;
-function disable_controls() {
+export function disable_controls() {
     if (m_ctl.check_sensor_manifolds(_char_wrapper.phys_body))
         m_ctl.remove_sensor_manifold(_char_wrapper.phys_body);
     m_phy.set_character_move_dir(_char_wrapper.phys_body, 0, 0);
     m_sfx.stop(_char_run_spk);
 }
 
-exports.reset = function() {
+export function reset() {
     _char_wrapper.state = m_conf.CH_STILL;
     _char_wrapper.hp = m_conf.MAX_CHAR_HP;
     _char_wrapper.island = -1;
@@ -405,19 +401,18 @@ exports.reset = function() {
 }
 
 
-exports.apply_hp_potion = function() {
+export function apply_hp_potion() {
     change_hp(m_conf.BONUS_HP_INCR);
     m_anim.play(_char_wrapper.body);
 }
 
-exports.apply_lava_protect = function() {
+export function apply_lava_protect() {
     m_anim.apply(_char_wrapper.body, "LAVA_grow", m_anim.SLOT_1);
     m_anim.set_behavior(_char_wrapper.body, m_anim.AB_FINISH_STOP, m_anim.SLOT_1);
     m_anim.play(_char_wrapper.body, null, m_anim.SLOT_1);
 }
 
-exports.remove_lava_protect = remove_lava_protect;
-function remove_lava_protect() {
+export function remove_lava_protect() {
     m_anim.apply(_char_wrapper.body, "LAVA_fall", m_anim.SLOT_1);
     m_anim.set_behavior(_char_wrapper.body, m_anim.AB_FINISH_STOP, m_anim.SLOT_1);
     m_anim.play(_char_wrapper.body, null, m_anim.SLOT_1);
@@ -425,8 +420,7 @@ function remove_lava_protect() {
     m_bonuses.set_lava_protect_time(0);
 }
 
-exports.apply_shield = apply_shield;
-function apply_shield() {
+export function apply_shield() {
     m_anim.apply(_char_wrapper.body, "SHIELD_grow", m_anim.SLOT_2);
     m_anim.set_behavior(_char_wrapper.body, m_anim.AB_FINISH_STOP, m_anim.SLOT_2);
     m_anim.play(_char_wrapper.body, null, m_anim.SLOT_2);
@@ -436,8 +430,7 @@ function apply_shield() {
     m_anim.play(_char_wrapper.shield_sphere);
 }
 
-exports.remove_shield = remove_shield;
-function remove_shield() {
+export function remove_shield() {
     m_anim.apply(_char_wrapper.body, "SHIELD_flash", m_anim.SLOT_2);
     m_anim.set_behavior(_char_wrapper.body, m_anim.AB_FINISH_STOP, m_anim.SLOT_2);
     m_anim.play(_char_wrapper.body, null, m_anim.SLOT_2);
@@ -449,8 +442,7 @@ function remove_shield() {
     m_bonuses.set_shield_time(0);
 }
 
-exports.change_hp = change_hp;
-function change_hp(amount) {
+export function change_hp(amount) {
 
     if (_char_wrapper.hp <= 0)
         return;
@@ -497,14 +489,14 @@ function kill() {
     if (_char_wrapper.gem_slot)
         remove_gem();
 
-    if (m_bonuses.shield_time_left > 0)
+    if (<any>m_bonuses.shield_time_left > 0)
         remove_shield();
 
-    if (m_bonuses.lava_protect_time_left > 0)
+    if (<any>m_bonuses.lava_protect_time_left > 0)
         remove_lava_protect();
 }
 
-exports.add_gem = function(gem_wrapper) {
+export function add_gem(gem_wrapper) {
     var gem_empty = gem_wrapper.empty;
     if (_char_wrapper.gem_slot) {
         if (_char_wrapper.gem_slot == gem_wrapper)
@@ -519,8 +511,7 @@ exports.add_gem = function(gem_wrapper) {
     m_sfx.play_def(_gem_pickup_spk);
 }
 
-exports.remove_gem = remove_gem;
-function remove_gem() {
+export function remove_gem() {
     var gem_empty = _char_wrapper.gem_slot.empty;
     m_cons.remove(gem_empty);
     m_trans.set_translation_v(gem_empty, m_conf.DEFAULT_POS);
@@ -529,8 +520,6 @@ function remove_gem() {
     _char_wrapper.gem_slot = null;
 }
 
-exports.get_wrapper = function() {
+export function get_wrapper() {
     return _char_wrapper;
 }
-
-})

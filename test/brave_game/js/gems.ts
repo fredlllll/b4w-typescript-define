@@ -1,24 +1,22 @@
-if (b4w.module_check("gems"))
-    throw "Failed to register module: gems";
+/// <reference path="../../../typings/requirejs/require.d.ts"/>
+/// <reference path="../../../typings/b4w/b4w.d.ts"/>
 
-b4w.register("gems", function(exports, require) {
+var m_ctl:b4w.controls = b4w.require("controls");
+var m_scs:b4w.scenes = b4w.require("scenes");
+var m_anim:b4w.animation = b4w.require("animation");
+var m_sfx:b4w.sfx = b4w.require("sfx");
+var m_trans:b4w.transform = b4w.require("transform");
+var m_util:b4w.util  = b4w.require("util");
+var m_cons:b4w.constraints  = b4w.require("constraints");
+var m_vec3:b4w.vec3  = b4w.require("vec3");
 
-var m_ctl = require("controls");
-var m_scs = require("scenes");
-var m_anim = require("animation");
-var m_sfx = require("sfx");
-var m_trans = require("transform");
-var m_util  = require("util");
-var m_cons  = require("constraints");
-var m_vec3  = require("vec3");
+import m_conf = require("./game_config");
+import m_obelisks = require("./obelisks");
+import m_char = require("./character");
 
-var m_conf = require("game_config");
-var m_obelisks = require("obelisks");
-var m_char = require("character");
+var _gem_wrappers = [];
 
-var _gem_wrappers = []; 
-
-exports.init = function() {
+export function init() {
     var gem_cb = function(gem, id, pulse, gem_wrapper) {
         if (pulse == 1) {
             m_char.add_gem(gem_wrapper);
@@ -49,7 +47,7 @@ function init_gem_wrapper(empty, gem, id) {
     return gem_wrapper;
 }
 
-exports.spawn = function(trans) {
+export function spawn(trans) {
     var num_spare = 0;
     for (var i = 0; i < _gem_wrappers.length; i++) {
         if (can_spawn(i))
@@ -71,7 +69,7 @@ exports.spawn = function(trans) {
     }
 }
 
-exports.reset = function() {
+export function reset() {
     for (var i = 0; i < _gem_wrappers.length; i++) {
         var gem_wrapper = _gem_wrappers[i];
         var gem_empty = gem_wrapper.empty;
@@ -85,5 +83,3 @@ function can_spawn(id) {
     return _gem_wrappers[id].state == m_conf.GM_SPARE &&
            (!m_obelisks.is_filled(id) || id == 5); // multi gem
 }
-
-})

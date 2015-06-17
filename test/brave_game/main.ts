@@ -1,35 +1,28 @@
 /// <reference path="../../typings/requirejs/require.d.ts"/>
 /// <reference path="../../typings/b4w/b4w.d.ts"/>
-"use strict"
 
-// check if module exists
-if (b4w.module_check("game_example_main"))
-    throw "Failed to register module: game_example_main";
+var m_app:b4w.app   = b4w.require("app");
+var m_main:b4w.main  = b4w.require("main");
+var m_data:b4w.data  = b4w.require("data");
+var m_ctl:b4w.controls   = b4w.require("controls");
+var m_cons:b4w.constraints  = b4w.require("constraints");
+var m_scs:b4w.scenes   = b4w.require("scenes");
+var m_cfg:b4w.config   = b4w.require("config");
+var m_print:b4w.print = b4w.require("print");
+var m_sfx:b4w.sfx   = b4w.require("sfx");
 
-b4w.register("game_example_main", function(exports, require) {
+var m_vec3:b4w.vec3  = b4w.require("vec3");
+var m_quat:b4w.quat  = b4w.require("quat");
 
-var m_app   = require("app");
-var m_main  = require("main");
-var m_data  = require("data");
-var m_ctl   = require("controls");
-var m_cons  = require("constraints");
-var m_scs   = require("scenes");
-var m_cfg   = require("config");
-var m_print = require("print");
-var m_sfx   = require("sfx");
-
-var m_vec3  = require("vec3");
-var m_quat  = require("quat");
-
-var m_conf = require("game_config");
-var m_char = require("character");
-var m_combat = require("combat");
-var m_bonuses = require("bonuses");
-var m_interface = require("interface");
-var m_golems = require("golems");
-var m_obelisks = require("obelisks");
-var m_gems = require("gems");
-var m_env = require("environment");
+import m_conf = require('./js/game_config');
+import m_char = require("./js/character");
+import m_combat = require("./js/combat");
+import m_bonuses = require("./js/bonuses");
+import m_interface = require("./js/interface");
+import m_golems = require("./js/golems");
+import m_obelisks = require("./js/obelisks");
+import m_gems = require("./js/gems");
+import m_env = require("./js/environment");
 
 var _char_wrapper = null;
 
@@ -40,7 +33,7 @@ var _vec3_tmp_4 = new Float32Array(3);
 var _quat4_tmp = new Float32Array(4);
 var _quat4_tmp2 = new Float32Array(4);
 
-exports.init = function() {
+export function init() {
 
     if(detect_mobile())
         var quality = m_cfg.P_LOW;
@@ -64,7 +57,7 @@ function init_cb(canvas_elem, success) {
         return;
     }
 
-    m_app.enable_controls(canvas_elem);
+    m_app.enable_controls();
 
     window.onresize = on_resize;
     on_resize();
@@ -175,7 +168,3 @@ function setup_music() {
     m_ctl.create_sensor_manifold(null, "PLAYLIST", m_ctl.CT_SHOT,
         [m_ctl.create_timer_sensor(intro_duration)], null, playlist_cb);
 }
-
-});
-
-b4w.require("game_example_main").init();

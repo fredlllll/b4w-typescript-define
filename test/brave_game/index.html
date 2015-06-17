@@ -6,15 +6,8 @@
    <script src="../../require.js"></script>
    <script src="../../config.js"></script>
    <script src="../../b4w/b4w.full.min.js"></script>
-   <script type="text/javascript" src="js/game_config.js"></script>
-  <script type="text/javascript" src="js/obelisks.js"></script>
-  <script type="text/javascript" src="js/gems.js"></script>
-  <script type="text/javascript" src="js/interface.js"></script>
-  <script type="text/javascript" src="js/bonuses.js"></script>
-  <script type="text/javascript" src="js/golems.js"></script>
-  <script type="text/javascript" src="js/combat.js"></script>
-  <script type="text/javascript" src="js/character.js"></script>
-  <script type="text/javascript" src="js/environment.js"></script>
+
+
    <style>
       body {
           margin: 0;
@@ -45,8 +38,8 @@
 
 </body>
 <script>
-  require(['main'],function(){
-
+  require(['main'],function(main){
+    main.init();
   });
 </script>
 </html>
